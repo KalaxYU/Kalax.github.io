@@ -1,3 +1,5 @@
+
+
 ---
 title: Kalax's notes
 ---
@@ -8,4 +10,4 @@ Sort out French notes for now.
 
 ## Current content
 
-- français
+- [[法语 Français/index|法语笔记]]
