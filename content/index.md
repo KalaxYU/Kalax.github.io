@@ -1,6 +1,11 @@
 ---
-title: Welcome to Quartz
+title: Kalax's notes
 ---
 
-This is a blank Quartz installation.
-See the [documentation](https://quartz.jzhao.xyz) for how to get started.
+# Kalax's notes
+
+Sort out French notes for now.
+
+## Current content
+
+- français
