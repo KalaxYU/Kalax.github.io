@@ -8,11 +8,11 @@ title: 法语 Français
 
 ## 目录
 
-- [[动词 Verbe|动词 Verbe]]
-- [[否定句 Phrase Négative|否定句]]
-- [[疑问句 Phrase Interrogative|疑问句]]
-- [[人称 Personne|人称]]
-- [[介词 Préposition|介词]]
+- [[动词  Verbe|动词 Verbe]]
+- [[否定句  Phrase Négative|否定句]]
+- [[疑问句  Phrase Interrogative|疑问句]]
+- [[人称  Personne|人称]]
+- [[介词  Préposition|介词]]
 - [[冠词|冠词]]
 - [[你好！法语|你好！法语]]
 - [[Lesson 1-12 Vocabulaire|1-12课词汇]]
