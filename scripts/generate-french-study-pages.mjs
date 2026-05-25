@@ -522,6 +522,13 @@ tags:
 .frq-feedback.bad {
   color: #b65f4b;
 }
+.frq-choice-list {
+  margin: 0.55rem 0 0;
+  padding-left: 1.2rem;
+}
+.frq-choice-list li {
+  margin: 0.18rem 0;
+}
 .frq-next {
   margin-top: 0.7rem;
   width: 100%;
@@ -962,10 +969,10 @@ function buildTrainerScript() {
     }
 
     function sampleOptions(answer, pool) {
-      const picked = [answer.term]
+      const picked = [answer]
       const shuffled = shuffle(pool.filter((item) => item.id !== answer.id))
       for (const item of shuffled) {
-        if (!picked.includes(item.term)) picked.push(item.term)
+        if (!picked.some((pickedItem) => pickedItem.term === item.term)) picked.push(item)
         if (picked.length === 4) break
       }
       return shuffle(picked)
@@ -983,6 +990,19 @@ function buildTrainerScript() {
       trainer.hidden = false
       title.textContent = group.name
       renderCard()
+    }
+
+    function showFinished() {
+      clearTimeout(state.timer)
+      state.locked = true
+      next.hidden = true
+      progress.textContent = "完成"
+      icon.textContent = "🎉"
+      translation.textContent = "这个分类已经全部完成"
+      sectionLabel.textContent = state.group.name + " · " + state.deck.length + " 个词"
+      options.innerHTML = ""
+      feedback.textContent = "点“重排”可以重新随机练一遍，或点“分类”选择别的部分。"
+      feedback.className = "frq-feedback good"
     }
 
     function renderCategories() {
@@ -1009,8 +1029,8 @@ function buildTrainerScript() {
       feedback.className = "frq-feedback"
 
       if (state.index >= state.deck.length) {
-        state.deck = shuffle(state.group.items)
-        state.index = 0
+        showFinished()
+        return
       }
 
       const item = state.deck[state.index]
@@ -1024,7 +1044,8 @@ function buildTrainerScript() {
         const button = document.createElement("button")
         button.type = "button"
         button.className = "frq-option"
-        button.textContent = option
+        button.textContent = option.term
+        button.dataset.translation = option.translation
         button.addEventListener("click", () => answer(button, item, option))
         options.append(button)
       }
@@ -1033,7 +1054,7 @@ function buildTrainerScript() {
     function answer(button, item, option) {
       if (state.locked) return
       state.locked = true
-      const correct = option === item.term
+      const correct = option.term === item.term
 
       for (const optionButton of options.querySelectorAll("button")) {
         optionButton.disabled = true
@@ -1041,13 +1062,28 @@ function buildTrainerScript() {
       }
 
       if (!correct) button.classList.add("is-wrong")
-      feedback.textContent = correct
-        ? "正确：" + item.term + " = " + item.translation
-        : "答案：" + item.term + " = " + item.translation
       feedback.classList.add(correct ? "good" : "bad")
       next.hidden = false
       state.index += 1
-      state.timer = setTimeout(renderCard, correct ? 650 : 1100)
+
+      if (correct) {
+        feedback.textContent = "正确：" + item.term + " = " + item.translation
+        state.timer = setTimeout(renderCard, 1500)
+        return
+      }
+
+      feedback.textContent = ""
+      const answerLine = document.createElement("div")
+      answerLine.textContent = "答案：" + item.term + " = " + item.translation
+      feedback.append(answerLine)
+      const list = document.createElement("ul")
+      list.className = "frq-choice-list"
+      for (const optionButton of options.querySelectorAll("button")) {
+        const row = document.createElement("li")
+        row.textContent = optionButton.textContent + " = " + optionButton.dataset.translation
+        list.append(row)
+      }
+      feedback.append(list)
     }
 
     next.addEventListener("click", renderCard)
