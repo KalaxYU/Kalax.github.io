@@ -143,6 +143,7 @@ sac::包
 clé::钥匙
 ordinateur::电脑
 télévision::电视
+téléphone::电话
 blouson::夹克
 chapeau::帽子
 chemise::衬衫
@@ -274,8 +275,10 @@ compter::数，计算
 ## 艺术、兴趣、文化
 
 art::艺术，美术
+artiste::艺术家
 cinéma::电影，电影院
 film::电影
+photo::照片
 photographie::摄影，照片
 musique::音乐
 classique::古典的，经典的
@@ -285,6 +288,7 @@ lecture::阅读
 dessin::画，绘画
 tableau::画，表格
 poème::诗
+musée::博物馆
 peinture::绘画
 sculpture::雕塑
 aimer::喜欢，爱
@@ -377,6 +381,7 @@ que/qu’::什么
 quoi::什么
 où::哪里
 comment::怎样，如何
+combien::多少
 pourquoi::为什么
 parce que::因为
 oui::是的
@@ -396,13 +401,38 @@ de/des/du/de la::……的；从……
 
 ## 必背动词总表
 
+être::是，在
+avoir::有
+aller::去
+s’appeler::名叫
+habiter::居住
+parler::说，讲
+aimer::喜欢，爱
+préférer::更喜欢
+demander::问，请求
 chercher::找
 trouver::找到，认为
+porter::穿，戴
 mettre::放，穿上
+acheter::买
+vendre::卖
+coûter::花费
+faire::做，值
 prendre::拿，乘坐
+venir::来
+partir::出发，离开
+arriver::到达
+visiter::参观，游览
+continuer::继续
+traverser::穿过
+tourner::转弯
+passer::经过
+entrer::进入
+sortir::出去
 lire::读
 écrire::写
 voir::看见
+compter::数，计算
 
 ## 数字：至少要熟到 0–100
 

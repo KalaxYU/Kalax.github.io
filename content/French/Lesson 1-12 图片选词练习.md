@@ -6,794 +6,348 @@ tags:
 
 # Lesson 1-12 图片选词练习
 
-从图片和中文提示出发，选择对应的法语单词。
+先选择一个词汇分类，再像百词斩一样一张一张选择对应的法语单词。每次打开页面都会重新随机排序。
 
 [[Lesson 1-12  Vocabulaire|返回词汇表]] · [[Lesson 1-12 Flashcards|打开闪卡]]
 
+<div id="frq-app" class="frq-app">
+  <section class="frq-menu" aria-label="选择词汇分类">
+    <div class="frq-menu-head">
+      <strong>选择分类</strong>
+      <span data-total-count>418 个词</span>
+    </div>
+    <div class="frq-categories" data-categories></div>
+  </section>
+
+  <section class="frq-trainer" data-trainer hidden>
+    <div class="frq-topbar">
+      <button type="button" data-back>分类</button>
+      <div>
+        <strong data-section-title></strong>
+        <span data-progress></span>
+      </div>
+      <button type="button" data-reshuffle>重排</button>
+    </div>
+
+    <div class="frq-card" data-card>
+      <div class="frq-picture">
+        <span data-icon></span>
+      </div>
+      <div class="frq-prompt">
+        <p data-translation></p>
+        <small data-section-label></small>
+      </div>
+      <div class="frq-options" data-options></div>
+      <p class="frq-feedback" data-feedback></p>
+      <button type="button" class="frq-next" data-next hidden>下一个</button>
+    </div>
+  </section>
+</div>
+
 <style>
-.frq-wrap {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1rem;
+.frq-app {
   margin: 1.5rem 0;
 }
+.frq-menu-head,
+.frq-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.frq-menu-head span,
+.frq-topbar span {
+  color: var(--gray);
+  font-size: 0.95rem;
+}
+.frq-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+.frq-category {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  padding: 0.8rem;
+  background: var(--light);
+  color: var(--dark);
+  cursor: pointer;
+  text-align: left;
+}
+.frq-category:hover,
+.frq-category:focus-visible {
+  border-color: var(--secondary);
+  outline: none;
+}
+.frq-category .frq-cat-icon {
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--tertiary) 24%, transparent);
+  font-size: 1.35rem;
+}
+.frq-category strong {
+  display: block;
+  line-height: 1.2;
+}
+.frq-category small {
+  color: var(--gray);
+}
+.frq-category em {
+  color: var(--secondary);
+  font-style: normal;
+  font-weight: 700;
+}
+.frq-topbar button,
+.frq-next {
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  background: var(--light);
+  color: var(--dark);
+  cursor: pointer;
+}
 .frq-card {
+  max-width: 680px;
   border: 1px solid var(--lightgray);
   border-radius: 8px;
   padding: 1rem;
-  background: color-mix(in srgb, var(--light) 92%, var(--secondary));
+  background: color-mix(in srgb, var(--light) 94%, var(--secondary));
 }
 .frq-picture {
   display: grid;
   place-items: center;
-  min-height: 120px;
+  min-height: 210px;
   border-radius: 8px;
   background:
-    radial-gradient(circle at 20% 15%, rgba(132, 165, 157, 0.28), transparent 28%),
-    linear-gradient(135deg, rgba(123, 151, 170, 0.2), rgba(255, 214, 102, 0.16));
+    radial-gradient(circle at 18% 18%, rgba(132, 165, 157, 0.26), transparent 30%),
+    radial-gradient(circle at 82% 22%, rgba(255, 214, 102, 0.18), transparent 26%),
+    linear-gradient(135deg, rgba(123, 151, 170, 0.2), rgba(132, 165, 157, 0.1));
   border: 1px solid color-mix(in srgb, var(--lightgray) 70%, var(--tertiary));
 }
 .frq-picture span {
-  font-size: 4.25rem;
+  font-size: 5rem;
   line-height: 1;
 }
 .frq-prompt p {
-  margin: 0.85rem 0 0.15rem;
-  font-weight: 700;
+  margin: 1rem 0 0.15rem;
+  font-size: 1.35rem;
+  font-weight: 800;
 }
 .frq-prompt small {
   color: var(--gray);
 }
 .frq-options {
   display: grid;
-  gap: 0.45rem;
-  margin-top: 0.85rem;
+  gap: 0.55rem;
+  margin-top: 1rem;
 }
-.frq-options input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-.frq-options label {
-  display: block;
+.frq-option {
   border: 1px solid var(--lightgray);
   border-radius: 8px;
-  padding: 0.42rem 0.65rem;
-  cursor: pointer;
+  padding: 0.72rem 0.85rem;
   background: var(--light);
+  color: var(--dark);
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
 }
-.frq-options label:hover {
+.frq-option:hover,
+.frq-option:focus-visible {
   border-color: var(--secondary);
+  outline: none;
 }
-.frq-options input.correct:checked + label {
+.frq-option.is-correct {
   border-color: #2f8f5b;
   background: rgba(47, 143, 91, 0.16);
-  color: var(--dark);
 }
-.frq-options input.wrong:checked + label {
+.frq-option.is-wrong {
   border-color: #b65f4b;
   background: rgba(182, 95, 75, 0.16);
-  color: var(--dark);
 }
 .frq-feedback {
-  display: none;
-  margin: 0.85rem 0 0;
-  font-weight: 700;
+  min-height: 1.6rem;
+  margin: 0.9rem 0 0;
+  font-weight: 800;
 }
-.frq-card:has(input.correct:checked) .frq-good,
-.frq-card:has(input.wrong:checked) .frq-bad {
-  display: block;
-}
-.frq-good {
+.frq-feedback.good {
   color: #2f8f5b;
 }
-.frq-bad {
+.frq-feedback.bad {
   color: #b65f4b;
+}
+.frq-next {
+  margin-top: 0.7rem;
+  width: 100%;
+  font-weight: 800;
+}
+@media (max-width: 560px) {
+  .frq-menu-head,
+  .frq-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .frq-card {
+    padding: 0.85rem;
+  }
+  .frq-picture {
+    min-height: 150px;
+  }
+  .frq-picture span {
+    font-size: 4rem;
+  }
 }
 </style>
 
-<section class="frq-wrap">
-<article class="frq-card">
-  <div class="frq-picture" aria-label="帽子">
-    <span>🎩</span>
-  </div>
-  <div class="frq-prompt">
-    <p>戴在头上的衣物</p>
-    <small>帽子</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-0-0" class="wrong" type="radio" name="frq-0">
-<label for="frq-0-0">lit</label>
-<input id="frq-0-1" class="wrong" type="radio" name="frq-0">
-<label for="frq-0-1">ordinateur</label>
-<input id="frq-0-2" class="wrong" type="radio" name="frq-0">
-<label for="frq-0-2">voiture</label>
-<input id="frq-0-3" class="correct" type="radio" name="frq-0">
-<label for="frq-0-3">chapeau</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：chapeau = 帽子</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+<script type="application/json" id="frq-data">{&quot;generatedAt&quot;:&quot;2026-05-25T12:35:07.756Z&quot;,&quot;totalCards&quot;:418,&quot;groups&quot;:[{&quot;id&quot;:&quot;section-1&quot;,&quot;name&quot;:&quot;人物、身份、职业&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-1-1&quot;,&quot;icon&quot;:&quot;👨&quot;,&quot;term&quot;:&quot;monsieur&quot;,&quot;rawTerm&quot;:&quot;monsieur n.m.&quot;,&quot;translation&quot;:&quot;先生&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-2&quot;,&quot;icon&quot;:&quot;👩&quot;,&quot;term&quot;:&quot;madame&quot;,&quot;rawTerm&quot;:&quot;madame n.f.&quot;,&quot;translation&quot;:&quot;女士，夫人&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-3&quot;,&quot;icon&quot;:&quot;👩&quot;,&quot;term&quot;:&quot;mademoiselle&quot;,&quot;rawTerm&quot;:&quot;mademoiselle n.f.&quot;,&quot;translation&quot;:&quot;小姐&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-4&quot;,&quot;icon&quot;:&quot;🤝&quot;,&quot;term&quot;:&quot;ami(e)&quot;,&quot;rawTerm&quot;:&quot;ami(e) n.&quot;,&quot;translation&quot;:&quot;朋友&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-5&quot;,&quot;icon&quot;:&quot;🤝&quot;,&quot;term&quot;:&quot;copain/copine&quot;,&quot;rawTerm&quot;:&quot;copain/copine n.&quot;,&quot;translation&quot;:&quot;朋友，同伴&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-6&quot;,&quot;icon&quot;:&quot;🧑&quot;,&quot;term&quot;:&quot;garçon&quot;,&quot;rawTerm&quot;:&quot;garçon n.m.&quot;,&quot;translation&quot;:&quot;男孩，服务员&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-7&quot;,&quot;icon&quot;:&quot;👧&quot;,&quot;term&quot;:&quot;fille&quot;,&quot;rawTerm&quot;:&quot;fille n.f.&quot;,&quot;translation&quot;:&quot;女孩，女儿&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-8&quot;,&quot;icon&quot;:&quot;👩&quot;,&quot;term&quot;:&quot;femme&quot;,&quot;rawTerm&quot;:&quot;femme n.f.&quot;,&quot;translation&quot;:&quot;女人，妻子&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-9&quot;,&quot;icon&quot;:&quot;👨&quot;,&quot;term&quot;:&quot;homme&quot;,&quot;rawTerm&quot;:&quot;homme n.m.&quot;,&quot;translation&quot;:&quot;男人&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-10&quot;,&quot;icon&quot;:&quot;👨&quot;,&quot;term&quot;:&quot;père&quot;,&quot;rawTerm&quot;:&quot;père n.m.&quot;,&quot;translation&quot;:&quot;父亲&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-11&quot;,&quot;icon&quot;:&quot;👩&quot;,&quot;term&quot;:&quot;mère&quot;,&quot;rawTerm&quot;:&quot;mère n.f.&quot;,&quot;translation&quot;:&quot;母亲&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-12&quot;,&quot;icon&quot;:&quot;👦&quot;,&quot;term&quot;:&quot;frère&quot;,&quot;rawTerm&quot;:&quot;frère n.m.&quot;,&quot;translation&quot;:&quot;兄弟&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-13&quot;,&quot;icon&quot;:&quot;👧&quot;,&quot;term&quot;:&quot;sœur&quot;,&quot;rawTerm&quot;:&quot;sœur n.f.&quot;,&quot;translation&quot;:&quot;姐妹&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-14&quot;,&quot;icon&quot;:&quot;👦&quot;,&quot;term&quot;:&quot;fils&quot;,&quot;rawTerm&quot;:&quot;fils n.m.&quot;,&quot;translation&quot;:&quot;儿子&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-15&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;voisin(e)&quot;,&quot;rawTerm&quot;:&quot;voisin(e) n.&quot;,&quot;translation&quot;:&quot;邻居&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-16&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;étudiant(e)&quot;,&quot;rawTerm&quot;:&quot;étudiant(e) n.&quot;,&quot;translation&quot;:&quot;大学生&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-17&quot;,&quot;icon&quot;:&quot;🧑‍🏫&quot;,&quot;term&quot;:&quot;professeur&quot;,&quot;rawTerm&quot;:&quot;professeur n.m.&quot;,&quot;translation&quot;:&quot;教师，教授&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-18&quot;,&quot;icon&quot;:&quot;🗂️&quot;,&quot;term&quot;:&quot;secrétaire&quot;,&quot;rawTerm&quot;:&quot;secrétaire n.&quot;,&quot;translation&quot;:&quot;秘书&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-19&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;directeur/directrice&quot;,&quot;rawTerm&quot;:&quot;directeur/directrice n.&quot;,&quot;translation&quot;:&quot;经理，主任&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-20&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;assistant(e)&quot;,&quot;rawTerm&quot;:&quot;assistant(e) n.&quot;,&quot;translation&quot;:&quot;助手，助理&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-21&quot;,&quot;icon&quot;:&quot;📷&quot;,&quot;term&quot;:&quot;photographe&quot;,&quot;rawTerm&quot;:&quot;photographe n.&quot;,&quot;translation&quot;:&quot;摄影师&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-22&quot;,&quot;icon&quot;:&quot;🦷&quot;,&quot;term&quot;:&quot;dentiste&quot;,&quot;rawTerm&quot;:&quot;dentiste n.&quot;,&quot;translation&quot;:&quot;牙医&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-23&quot;,&quot;icon&quot;:&quot;🥖&quot;,&quot;term&quot;:&quot;boulanger/boulangère&quot;,&quot;rawTerm&quot;:&quot;boulanger/boulangère n.&quot;,&quot;translation&quot;:&quot;面包师&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-24&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;commerçant(e)&quot;,&quot;rawTerm&quot;:&quot;commerçant(e) n.&quot;,&quot;translation&quot;:&quot;商人，店主&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-25&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;artiste&quot;,&quot;rawTerm&quot;:&quot;artiste n.&quot;,&quot;translation&quot;:&quot;艺术家&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-26&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;écrivain&quot;,&quot;rawTerm&quot;:&quot;écrivain n.m.&quot;,&quot;translation&quot;:&quot;作家&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-27&quot;,&quot;icon&quot;:&quot;🎵&quot;,&quot;term&quot;:&quot;musicien/musicienne&quot;,&quot;rawTerm&quot;:&quot;musicien/musicienne n.&quot;,&quot;translation&quot;:&quot;音乐家&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-28&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;peintre&quot;,&quot;rawTerm&quot;:&quot;peintre n.&quot;,&quot;translation&quot;:&quot;画家&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-29&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;poète&quot;,&quot;rawTerm&quot;:&quot;poète n.&quot;,&quot;translation&quot;:&quot;诗人&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-30&quot;,&quot;icon&quot;:&quot;🗿&quot;,&quot;term&quot;:&quot;sculpteur/sculptrice&quot;,&quot;rawTerm&quot;:&quot;sculpteur/sculptrice n.&quot;,&quot;translation&quot;:&quot;雕塑家&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-31&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;cinéaste&quot;,&quot;rawTerm&quot;:&quot;cinéaste n.&quot;,&quot;translation&quot;:&quot;电影人&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;},{&quot;id&quot;:&quot;w-1-32&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;correspondant(e)&quot;,&quot;rawTerm&quot;:&quot;correspondant(e) n.&quot;,&quot;translation&quot;:&quot;笔友，通信者&quot;,&quot;section&quot;:&quot;人物、身份、职业&quot;}]},{&quot;id&quot;:&quot;section-2&quot;,&quot;name&quot;:&quot;国家、城市、国籍、语言&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-2-1&quot;,&quot;icon&quot;:&quot;🇫🇷&quot;,&quot;term&quot;:&quot;France&quot;,&quot;rawTerm&quot;:&quot;France n.f.&quot;,&quot;translation&quot;:&quot;法国&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-2&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;français(e)&quot;,&quot;rawTerm&quot;:&quot;français(e) adj./n.&quot;,&quot;translation&quot;:&quot;法国的；法国人；法语&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-3&quot;,&quot;icon&quot;:&quot;🇨🇳&quot;,&quot;term&quot;:&quot;Chine&quot;,&quot;rawTerm&quot;:&quot;Chine n.f.&quot;,&quot;translation&quot;:&quot;中国&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-4&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;chinois(e)&quot;,&quot;rawTerm&quot;:&quot;chinois(e) adj./n.&quot;,&quot;translation&quot;:&quot;中国的；中国人；中文&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-5&quot;,&quot;icon&quot;:&quot;🇯🇵&quot;,&quot;term&quot;:&quot;Japon&quot;,&quot;rawTerm&quot;:&quot;Japon n.m.&quot;,&quot;translation&quot;:&quot;日本&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-6&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;japonais(e)&quot;,&quot;rawTerm&quot;:&quot;japonais(e) adj./n.&quot;,&quot;translation&quot;:&quot;日本的；日本人；日语&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-7&quot;,&quot;icon&quot;:&quot;🇮🇹&quot;,&quot;term&quot;:&quot;Italie&quot;,&quot;rawTerm&quot;:&quot;Italie n.f.&quot;,&quot;translation&quot;:&quot;意大利&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-8&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;italien(ne)&quot;,&quot;rawTerm&quot;:&quot;italien(ne) adj./n.&quot;,&quot;translation&quot;:&quot;意大利的；意大利人&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-9&quot;,&quot;icon&quot;:&quot;🇨🇦&quot;,&quot;term&quot;:&quot;Canada&quot;,&quot;rawTerm&quot;:&quot;Canada n.m.&quot;,&quot;translation&quot;:&quot;加拿大&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-10&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;canadien(ne)&quot;,&quot;rawTerm&quot;:&quot;canadien(ne) adj./n.&quot;,&quot;translation&quot;:&quot;加拿大的；加拿大人&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-11&quot;,&quot;icon&quot;:&quot;🇪🇸&quot;,&quot;term&quot;:&quot;Espagne&quot;,&quot;rawTerm&quot;:&quot;Espagne n.f.&quot;,&quot;translation&quot;:&quot;西班牙&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-12&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;espagnol(e)&quot;,&quot;rawTerm&quot;:&quot;espagnol(e) adj./n.&quot;,&quot;translation&quot;:&quot;西班牙的；西班牙人；西班牙语&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-13&quot;,&quot;icon&quot;:&quot;🇩🇪&quot;,&quot;term&quot;:&quot;Allemagne&quot;,&quot;rawTerm&quot;:&quot;Allemagne n.f.&quot;,&quot;translation&quot;:&quot;德国&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-14&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;allemand(e)&quot;,&quot;rawTerm&quot;:&quot;allemand(e) adj./n.&quot;,&quot;translation&quot;:&quot;德国的；德国人；德语&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-15&quot;,&quot;icon&quot;:&quot;🇧🇪&quot;,&quot;term&quot;:&quot;Belgique&quot;,&quot;rawTerm&quot;:&quot;Belgique n.f.&quot;,&quot;translation&quot;:&quot;比利时&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-16&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;belge&quot;,&quot;rawTerm&quot;:&quot;belge adj./n.&quot;,&quot;translation&quot;:&quot;比利时的；比利时人&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-17&quot;,&quot;icon&quot;:&quot;🇨🇭&quot;,&quot;term&quot;:&quot;Suisse&quot;,&quot;rawTerm&quot;:&quot;Suisse n.f.&quot;,&quot;translation&quot;:&quot;瑞士&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-18&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;suisse&quot;,&quot;rawTerm&quot;:&quot;suisse adj./n.&quot;,&quot;translation&quot;:&quot;瑞士的；瑞士人&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-19&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;américain(e)&quot;,&quot;rawTerm&quot;:&quot;américain(e) adj./n.&quot;,&quot;translation&quot;:&quot;美国的；美国人&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-20&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;québécois(e)&quot;,&quot;rawTerm&quot;:&quot;québécois(e) adj./n.&quot;,&quot;translation&quot;:&quot;魁北克的；魁北克人&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-21&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;guyanais(e)&quot;,&quot;rawTerm&quot;:&quot;guyanais(e) adj./n.&quot;,&quot;translation&quot;:&quot;圭亚那的；圭亚那人&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-22&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;sénégalais(e)&quot;,&quot;rawTerm&quot;:&quot;sénégalais(e) adj./n.&quot;,&quot;translation&quot;:&quot;塞内加尔的；塞内加尔人&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-23&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Europe&quot;,&quot;rawTerm&quot;:&quot;Europe n.f.&quot;,&quot;translation&quot;:&quot;欧洲&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-24&quot;,&quot;icon&quot;:&quot;🌍&quot;,&quot;term&quot;:&quot;monde&quot;,&quot;rawTerm&quot;:&quot;monde n.m.&quot;,&quot;translation&quot;:&quot;世界&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-25&quot;,&quot;icon&quot;:&quot;🗼&quot;,&quot;term&quot;:&quot;Paris&quot;,&quot;rawTerm&quot;:&quot;Paris&quot;,&quot;translation&quot;:&quot;巴黎&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-26&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Marseille&quot;,&quot;rawTerm&quot;:&quot;Marseille&quot;,&quot;translation&quot;:&quot;马赛&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-27&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Montréal&quot;,&quot;rawTerm&quot;:&quot;Montréal&quot;,&quot;translation&quot;:&quot;蒙特利尔&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-28&quot;,&quot;icon&quot;:&quot;🏛️&quot;,&quot;term&quot;:&quot;Rome&quot;,&quot;rawTerm&quot;:&quot;Rome&quot;,&quot;translation&quot;:&quot;罗马&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-29&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Genève&quot;,&quot;rawTerm&quot;:&quot;Genève&quot;,&quot;translation&quot;:&quot;日内瓦&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-30&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Bruxelles&quot;,&quot;rawTerm&quot;:&quot;Bruxelles&quot;,&quot;translation&quot;:&quot;布鲁塞尔&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-31&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Dakar&quot;,&quot;rawTerm&quot;:&quot;Dakar&quot;,&quot;translation&quot;:&quot;达喀尔&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-32&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Cayenne&quot;,&quot;rawTerm&quot;:&quot;Cayenne&quot;,&quot;translation&quot;:&quot;卡宴&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-33&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Lausanne&quot;,&quot;rawTerm&quot;:&quot;Lausanne&quot;,&quot;translation&quot;:&quot;洛桑&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-34&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Maroc&quot;,&quot;rawTerm&quot;:&quot;Maroc n.m.&quot;,&quot;translation&quot;:&quot;摩洛哥&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-35&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Pays-Bas&quot;,&quot;rawTerm&quot;:&quot;Pays-Bas n.m.pl.&quot;,&quot;translation&quot;:&quot;荷兰&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;},{&quot;id&quot;:&quot;w-2-36&quot;,&quot;icon&quot;:&quot;🗺️&quot;,&quot;term&quot;:&quot;Philippines&quot;,&quot;rawTerm&quot;:&quot;Philippines n.f.pl.&quot;,&quot;translation&quot;:&quot;菲律宾&quot;,&quot;section&quot;:&quot;国家、城市、国籍、语言&quot;}]},{&quot;id&quot;:&quot;section-3&quot;,&quot;name&quot;:&quot;问候、介绍、个人信息&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-3-1&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;bonjour&quot;,&quot;rawTerm&quot;:&quot;bonjour&quot;,&quot;translation&quot;:&quot;你好，早上好&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-2&quot;,&quot;icon&quot;:&quot;🌙&quot;,&quot;term&quot;:&quot;bonsoir&quot;,&quot;rawTerm&quot;:&quot;bonsoir&quot;,&quot;translation&quot;:&quot;晚上好&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-3&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;salut&quot;,&quot;rawTerm&quot;:&quot;salut&quot;,&quot;translation&quot;:&quot;你好；再见&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-4&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;au revoir&quot;,&quot;rawTerm&quot;:&quot;au revoir&quot;,&quot;translation&quot;:&quot;再见&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-5&quot;,&quot;icon&quot;:&quot;🙏&quot;,&quot;term&quot;:&quot;merci&quot;,&quot;rawTerm&quot;:&quot;merci&quot;,&quot;translation&quot;:&quot;谢谢&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-6&quot;,&quot;icon&quot;:&quot;🎉&quot;,&quot;term&quot;:&quot;bienvenue&quot;,&quot;rawTerm&quot;:&quot;bienvenue&quot;,&quot;translation&quot;:&quot;欢迎&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-7&quot;,&quot;icon&quot;:&quot;🧳&quot;,&quot;term&quot;:&quot;bon voyage&quot;,&quot;rawTerm&quot;:&quot;bon voyage&quot;,&quot;translation&quot;:&quot;旅途愉快&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-8&quot;,&quot;icon&quot;:&quot;📅&quot;,&quot;term&quot;:&quot;bon week-end&quot;,&quot;rawTerm&quot;:&quot;bon week-end&quot;,&quot;translation&quot;:&quot;周末愉快&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-9&quot;,&quot;icon&quot;:&quot;🎂&quot;,&quot;term&quot;:&quot;bon anniversaire&quot;,&quot;rawTerm&quot;:&quot;bon anniversaire&quot;,&quot;translation&quot;:&quot;生日快乐&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-10&quot;,&quot;icon&quot;:&quot;🏷️&quot;,&quot;term&quot;:&quot;nom&quot;,&quot;rawTerm&quot;:&quot;nom n.m.&quot;,&quot;translation&quot;:&quot;姓名，姓&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-11&quot;,&quot;icon&quot;:&quot;🏷️&quot;,&quot;term&quot;:&quot;prénom&quot;,&quot;rawTerm&quot;:&quot;prénom n.m.&quot;,&quot;translation&quot;:&quot;名&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-12&quot;,&quot;icon&quot;:&quot;🎂&quot;,&quot;term&quot;:&quot;âge&quot;,&quot;rawTerm&quot;:&quot;âge n.m.&quot;,&quot;translation&quot;:&quot;年龄&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-13&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;adresse&quot;,&quot;rawTerm&quot;:&quot;adresse n.f.&quot;,&quot;translation&quot;:&quot;地址&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-14&quot;,&quot;icon&quot;:&quot;✉️&quot;,&quot;term&quot;:&quot;e-mail&quot;,&quot;rawTerm&quot;:&quot;e-mail n.m.&quot;,&quot;translation&quot;:&quot;电子邮件&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-15&quot;,&quot;icon&quot;:&quot;☎️&quot;,&quot;term&quot;:&quot;téléphone&quot;,&quot;rawTerm&quot;:&quot;téléphone n.m.&quot;,&quot;translation&quot;:&quot;电话&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-16&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;numéro&quot;,&quot;rawTerm&quot;:&quot;numéro n.m.&quot;,&quot;translation&quot;:&quot;号码&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-17&quot;,&quot;icon&quot;:&quot;🪪&quot;,&quot;term&quot;:&quot;carte&quot;,&quot;rawTerm&quot;:&quot;carte n.f.&quot;,&quot;translation&quot;:&quot;卡片，地图，明信片&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-18&quot;,&quot;icon&quot;:&quot;💌&quot;,&quot;term&quot;:&quot;carte postale&quot;,&quot;rawTerm&quot;:&quot;carte postale n.f.&quot;,&quot;translation&quot;:&quot;明信片&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-19&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;correspondance&quot;,&quot;rawTerm&quot;:&quot;correspondance n.f.&quot;,&quot;translation&quot;:&quot;通信&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-20&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;s’appeler&quot;,&quot;rawTerm&quot;:&quot;s’appeler v.&quot;,&quot;translation&quot;:&quot;名叫&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-21&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;être&quot;,&quot;rawTerm&quot;:&quot;être v.&quot;,&quot;translation&quot;:&quot;是，在&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-22&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;avoir&quot;,&quot;rawTerm&quot;:&quot;avoir v.&quot;,&quot;translation&quot;:&quot;有&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-23&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;habiter&quot;,&quot;rawTerm&quot;:&quot;habiter v.&quot;,&quot;translation&quot;:&quot;居住&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-24&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;parler&quot;,&quot;rawTerm&quot;:&quot;parler v.&quot;,&quot;translation&quot;:&quot;说，讲&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-25&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;demander&quot;,&quot;rawTerm&quot;:&quot;demander v.&quot;,&quot;translation&quot;:&quot;问，请求&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-26&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;présenter&quot;,&quot;rawTerm&quot;:&quot;présenter v.&quot;,&quot;translation&quot;:&quot;介绍&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-27&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;prononcer&quot;,&quot;rawTerm&quot;:&quot;prononcer v.&quot;,&quot;translation&quot;:&quot;发音&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;},{&quot;id&quot;:&quot;w-3-28&quot;,&quot;icon&quot;:&quot;👋&quot;,&quot;term&quot;:&quot;correspondre&quot;,&quot;rawTerm&quot;:&quot;correspondre v.&quot;,&quot;translation&quot;:&quot;通信，对应&quot;,&quot;section&quot;:&quot;问候、介绍、个人信息&quot;}]},{&quot;id&quot;:&quot;section-4&quot;,&quot;name&quot;:&quot;房间、家具、日常物品&quot;,&quot;icon&quot;:&quot;🏠&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-4-1&quot;,&quot;icon&quot;:&quot;🏠&quot;,&quot;term&quot;:&quot;appartement&quot;,&quot;rawTerm&quot;:&quot;appartement n.m.&quot;,&quot;translation&quot;:&quot;公寓&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-2&quot;,&quot;icon&quot;:&quot;🛏️&quot;,&quot;term&quot;:&quot;chambre&quot;,&quot;rawTerm&quot;:&quot;chambre n.f.&quot;,&quot;translation&quot;:&quot;房间，卧室&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-3&quot;,&quot;icon&quot;:&quot;🛋️&quot;,&quot;term&quot;:&quot;salon&quot;,&quot;rawTerm&quot;:&quot;salon n.m.&quot;,&quot;translation&quot;:&quot;客厅&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-4&quot;,&quot;icon&quot;:&quot;🍳&quot;,&quot;term&quot;:&quot;cuisine&quot;,&quot;rawTerm&quot;:&quot;cuisine n.f.&quot;,&quot;translation&quot;:&quot;厨房&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-5&quot;,&quot;icon&quot;:&quot;🏠&quot;,&quot;term&quot;:&quot;salle&quot;,&quot;rawTerm&quot;:&quot;salle n.f.&quot;,&quot;translation&quot;:&quot;房间，厅&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-6&quot;,&quot;icon&quot;:&quot;🛁&quot;,&quot;term&quot;:&quot;salle de bains&quot;,&quot;rawTerm&quot;:&quot;salle de bains n.f.&quot;,&quot;translation&quot;:&quot;浴室&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-7&quot;,&quot;icon&quot;:&quot;🚻&quot;,&quot;term&quot;:&quot;toilettes&quot;,&quot;rawTerm&quot;:&quot;toilettes n.f.pl.&quot;,&quot;translation&quot;:&quot;卫生间&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-8&quot;,&quot;icon&quot;:&quot;🚪&quot;,&quot;term&quot;:&quot;entrée&quot;,&quot;rawTerm&quot;:&quot;entrée n.f.&quot;,&quot;translation&quot;:&quot;入口，门厅&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-9&quot;,&quot;icon&quot;:&quot;🪟&quot;,&quot;term&quot;:&quot;fenêtre&quot;,&quot;rawTerm&quot;:&quot;fenêtre n.f.&quot;,&quot;translation&quot;:&quot;窗户&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-10&quot;,&quot;icon&quot;:&quot;🚪&quot;,&quot;term&quot;:&quot;porte&quot;,&quot;rawTerm&quot;:&quot;porte n.f.&quot;,&quot;translation&quot;:&quot;门&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-11&quot;,&quot;icon&quot;:&quot;🧱&quot;,&quot;term&quot;:&quot;mur&quot;,&quot;rawTerm&quot;:&quot;mur n.m.&quot;,&quot;translation&quot;:&quot;墙&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-12&quot;,&quot;icon&quot;:&quot;🍽️&quot;,&quot;term&quot;:&quot;table&quot;,&quot;rawTerm&quot;:&quot;table n.f.&quot;,&quot;translation&quot;:&quot;桌子&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-13&quot;,&quot;icon&quot;:&quot;🪑&quot;,&quot;term&quot;:&quot;chaise&quot;,&quot;rawTerm&quot;:&quot;chaise n.f.&quot;,&quot;translation&quot;:&quot;椅子&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-14&quot;,&quot;icon&quot;:&quot;🗄️&quot;,&quot;term&quot;:&quot;étagère&quot;,&quot;rawTerm&quot;:&quot;étagère n.f.&quot;,&quot;translation&quot;:&quot;架子&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-15&quot;,&quot;icon&quot;:&quot;🛏️&quot;,&quot;term&quot;:&quot;lit&quot;,&quot;rawTerm&quot;:&quot;lit n.m.&quot;,&quot;translation&quot;:&quot;床&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-16&quot;,&quot;icon&quot;:&quot;📘&quot;,&quot;term&quot;:&quot;livre&quot;,&quot;rawTerm&quot;:&quot;livre n.m.&quot;,&quot;translation&quot;:&quot;书&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-17&quot;,&quot;icon&quot;:&quot;🖼️&quot;,&quot;term&quot;:&quot;affiche&quot;,&quot;rawTerm&quot;:&quot;affiche n.f.&quot;,&quot;translation&quot;:&quot;海报&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-18&quot;,&quot;icon&quot;:&quot;🖼️&quot;,&quot;term&quot;:&quot;tableau&quot;,&quot;rawTerm&quot;:&quot;tableau n.m.&quot;,&quot;translation&quot;:&quot;画，黑板&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-19&quot;,&quot;icon&quot;:&quot;📷&quot;,&quot;term&quot;:&quot;photo&quot;,&quot;rawTerm&quot;:&quot;photo n.f.&quot;,&quot;translation&quot;:&quot;照片&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-20&quot;,&quot;icon&quot;:&quot;🏺&quot;,&quot;term&quot;:&quot;vase&quot;,&quot;rawTerm&quot;:&quot;vase n.m.&quot;,&quot;translation&quot;:&quot;花瓶&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-21&quot;,&quot;icon&quot;:&quot;🍽️&quot;,&quot;term&quot;:&quot;assiette&quot;,&quot;rawTerm&quot;:&quot;assiette n.f.&quot;,&quot;translation&quot;:&quot;盘子&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-22&quot;,&quot;icon&quot;:&quot;🍴&quot;,&quot;term&quot;:&quot;fourchette&quot;,&quot;rawTerm&quot;:&quot;fourchette n.f.&quot;,&quot;translation&quot;:&quot;叉子&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-23&quot;,&quot;icon&quot;:&quot;🎒&quot;,&quot;term&quot;:&quot;sac&quot;,&quot;rawTerm&quot;:&quot;sac n.m.&quot;,&quot;translation&quot;:&quot;包&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-24&quot;,&quot;icon&quot;:&quot;🔑&quot;,&quot;term&quot;:&quot;clé&quot;,&quot;rawTerm&quot;:&quot;clé n.f.&quot;,&quot;translation&quot;:&quot;钥匙&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-25&quot;,&quot;icon&quot;:&quot;💻&quot;,&quot;term&quot;:&quot;ordinateur&quot;,&quot;rawTerm&quot;:&quot;ordinateur n.m.&quot;,&quot;translation&quot;:&quot;电脑&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-26&quot;,&quot;icon&quot;:&quot;📺&quot;,&quot;term&quot;:&quot;télévision&quot;,&quot;rawTerm&quot;:&quot;télévision n.f.&quot;,&quot;translation&quot;:&quot;电视&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-27&quot;,&quot;icon&quot;:&quot;☎️&quot;,&quot;term&quot;:&quot;téléphone&quot;,&quot;rawTerm&quot;:&quot;téléphone n.m.&quot;,&quot;translation&quot;:&quot;电话&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-28&quot;,&quot;icon&quot;:&quot;🧥&quot;,&quot;term&quot;:&quot;blouson&quot;,&quot;rawTerm&quot;:&quot;blouson n.m.&quot;,&quot;translation&quot;:&quot;夹克&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-29&quot;,&quot;icon&quot;:&quot;🎩&quot;,&quot;term&quot;:&quot;chapeau&quot;,&quot;rawTerm&quot;:&quot;chapeau n.m.&quot;,&quot;translation&quot;:&quot;帽子&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-30&quot;,&quot;icon&quot;:&quot;👔&quot;,&quot;term&quot;:&quot;chemise&quot;,&quot;rawTerm&quot;:&quot;chemise n.f.&quot;,&quot;translation&quot;:&quot;衬衫&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-31&quot;,&quot;icon&quot;:&quot;👟&quot;,&quot;term&quot;:&quot;chaussures&quot;,&quot;rawTerm&quot;:&quot;chaussures n.f.pl.&quot;,&quot;translation&quot;:&quot;鞋&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-32&quot;,&quot;icon&quot;:&quot;👓&quot;,&quot;term&quot;:&quot;lunettes&quot;,&quot;rawTerm&quot;:&quot;lunettes n.f.pl.&quot;,&quot;translation&quot;:&quot;眼镜&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-33&quot;,&quot;icon&quot;:&quot;👖&quot;,&quot;term&quot;:&quot;pantalon&quot;,&quot;rawTerm&quot;:&quot;pantalon n.m.&quot;,&quot;translation&quot;:&quot;裤子&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-34&quot;,&quot;icon&quot;:&quot;👗&quot;,&quot;term&quot;:&quot;robe&quot;,&quot;rawTerm&quot;:&quot;robe n.f.&quot;,&quot;translation&quot;:&quot;连衣裙&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-35&quot;,&quot;icon&quot;:&quot;🧶&quot;,&quot;term&quot;:&quot;pull&quot;,&quot;rawTerm&quot;:&quot;pull n.m.&quot;,&quot;translation&quot;:&quot;毛衣&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-36&quot;,&quot;icon&quot;:&quot;🏠&quot;,&quot;term&quot;:&quot;tailleur&quot;,&quot;rawTerm&quot;:&quot;tailleur n.m.&quot;,&quot;translation&quot;:&quot;女式套装&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-37&quot;,&quot;icon&quot;:&quot;👟&quot;,&quot;term&quot;:&quot;baskets&quot;,&quot;rawTerm&quot;:&quot;baskets n.f.pl.&quot;,&quot;translation&quot;:&quot;运动鞋&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-38&quot;,&quot;icon&quot;:&quot;👕&quot;,&quot;term&quot;:&quot;vêtement&quot;,&quot;rawTerm&quot;:&quot;vêtement n.m.&quot;,&quot;translation&quot;:&quot;衣服&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;},{&quot;id&quot;:&quot;w-4-39&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;boutique&quot;,&quot;rawTerm&quot;:&quot;boutique n.f.&quot;,&quot;translation&quot;:&quot;商店&quot;,&quot;section&quot;:&quot;房间、家具、日常物品&quot;}]},{&quot;id&quot;:&quot;section-5&quot;,&quot;name&quot;:&quot;方位、地点、城市设施&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-5-1&quot;,&quot;icon&quot;:&quot;⬅️&quot;,&quot;term&quot;:&quot;à gauche&quot;,&quot;rawTerm&quot;:&quot;à gauche&quot;,&quot;translation&quot;:&quot;在左边&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-2&quot;,&quot;icon&quot;:&quot;➡️&quot;,&quot;term&quot;:&quot;à droite&quot;,&quot;rawTerm&quot;:&quot;à droite&quot;,&quot;translation&quot;:&quot;在右边&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-3&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;au-dessous de&quot;,&quot;rawTerm&quot;:&quot;au-dessous de&quot;,&quot;translation&quot;:&quot;在……下面&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-4&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;au-dessus de&quot;,&quot;rawTerm&quot;:&quot;au-dessus de&quot;,&quot;translation&quot;:&quot;在……上面&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-5&quot;,&quot;icon&quot;:&quot;⬆️&quot;,&quot;term&quot;:&quot;devant&quot;,&quot;rawTerm&quot;:&quot;devant&quot;,&quot;translation&quot;:&quot;在……前面&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-6&quot;,&quot;icon&quot;:&quot;⬇️&quot;,&quot;term&quot;:&quot;derrière&quot;,&quot;rawTerm&quot;:&quot;derrière&quot;,&quot;translation&quot;:&quot;在……后面&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-7&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;entre&quot;,&quot;rawTerm&quot;:&quot;entre&quot;,&quot;translation&quot;:&quot;在……之间&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-8&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;sous&quot;,&quot;rawTerm&quot;:&quot;sous&quot;,&quot;translation&quot;:&quot;在……下面&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-9&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;sur&quot;,&quot;rawTerm&quot;:&quot;sur&quot;,&quot;translation&quot;:&quot;在……上面&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-10&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;dans&quot;,&quot;rawTerm&quot;:&quot;dans&quot;,&quot;translation&quot;:&quot;在……里面&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-11&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;avec&quot;,&quot;rawTerm&quot;:&quot;avec&quot;,&quot;translation&quot;:&quot;和；带有&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-12&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;contre&quot;,&quot;rawTerm&quot;:&quot;contre&quot;,&quot;translation&quot;:&quot;靠着，反对&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-13&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;vers&quot;,&quot;rawTerm&quot;:&quot;vers&quot;,&quot;translation&quot;:&quot;朝，向&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-14&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;à côté de&quot;,&quot;rawTerm&quot;:&quot;à côté de&quot;,&quot;translation&quot;:&quot;在……旁边&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-15&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;en face de&quot;,&quot;rawTerm&quot;:&quot;en face de&quot;,&quot;translation&quot;:&quot;在……对面&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-16&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;près de&quot;,&quot;rawTerm&quot;:&quot;près de&quot;,&quot;translation&quot;:&quot;离……近&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-17&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;loin de&quot;,&quot;rawTerm&quot;:&quot;loin de&quot;,&quot;translation&quot;:&quot;离……远&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-18&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;au bout de&quot;,&quot;rawTerm&quot;:&quot;au bout de&quot;,&quot;translation&quot;:&quot;在……尽头&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-19&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;au coin de&quot;,&quot;rawTerm&quot;:&quot;au coin de&quot;,&quot;translation&quot;:&quot;在……拐角&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-20&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;au bord de&quot;,&quot;rawTerm&quot;:&quot;au bord de&quot;,&quot;translation&quot;:&quot;在……边上&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-21&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;autour de&quot;,&quot;rawTerm&quot;:&quot;autour de&quot;,&quot;translation&quot;:&quot;在……周围&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-22&quot;,&quot;icon&quot;:&quot;🛣️&quot;,&quot;term&quot;:&quot;rue&quot;,&quot;rawTerm&quot;:&quot;rue n.f.&quot;,&quot;translation&quot;:&quot;街道&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-23&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;avenue&quot;,&quot;rawTerm&quot;:&quot;avenue n.f.&quot;,&quot;translation&quot;:&quot;大街&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-24&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;boulevard&quot;,&quot;rawTerm&quot;:&quot;boulevard n.m.&quot;,&quot;translation&quot;:&quot;林荫大道&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-25&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;place&quot;,&quot;rawTerm&quot;:&quot;place n.f.&quot;,&quot;translation&quot;:&quot;广场&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-26&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;quartier&quot;,&quot;rawTerm&quot;:&quot;quartier n.m.&quot;,&quot;translation&quot;:&quot;街区&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-27&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;bâtiment&quot;,&quot;rawTerm&quot;:&quot;bâtiment n.m.&quot;,&quot;translation&quot;:&quot;建筑&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-28&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;bureau&quot;,&quot;rawTerm&quot;:&quot;bureau n.m.&quot;,&quot;translation&quot;:&quot;办公室&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-29&quot;,&quot;icon&quot;:&quot;🏦&quot;,&quot;term&quot;:&quot;banque&quot;,&quot;rawTerm&quot;:&quot;banque n.f.&quot;,&quot;translation&quot;:&quot;银行&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-30&quot;,&quot;icon&quot;:&quot;📚&quot;,&quot;term&quot;:&quot;bibliothèque&quot;,&quot;rawTerm&quot;:&quot;bibliothèque n.f.&quot;,&quot;translation&quot;:&quot;图书馆&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-31&quot;,&quot;icon&quot;:&quot;🎬&quot;,&quot;term&quot;:&quot;cinéma&quot;,&quot;rawTerm&quot;:&quot;cinéma n.m.&quot;,&quot;translation&quot;:&quot;电影院&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-32&quot;,&quot;icon&quot;:&quot;🏛️&quot;,&quot;term&quot;:&quot;musée&quot;,&quot;rawTerm&quot;:&quot;musée n.m.&quot;,&quot;translation&quot;:&quot;博物馆&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-33&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;term&quot;:&quot;opéra&quot;,&quot;rawTerm&quot;:&quot;opéra n.m.&quot;,&quot;translation&quot;:&quot;歌剧院&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-34&quot;,&quot;icon&quot;:&quot;📮&quot;,&quot;term&quot;:&quot;poste&quot;,&quot;rawTerm&quot;:&quot;poste n.f.&quot;,&quot;translation&quot;:&quot;邮局&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-35&quot;,&quot;icon&quot;:&quot;🍽️&quot;,&quot;term&quot;:&quot;restaurant&quot;,&quot;rawTerm&quot;:&quot;restaurant n.m.&quot;,&quot;translation&quot;:&quot;餐馆&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-36&quot;,&quot;icon&quot;:&quot;☕&quot;,&quot;term&quot;:&quot;café&quot;,&quot;rawTerm&quot;:&quot;café n.m.&quot;,&quot;translation&quot;:&quot;咖啡馆&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-37&quot;,&quot;icon&quot;:&quot;🏨&quot;,&quot;term&quot;:&quot;hôtel&quot;,&quot;rawTerm&quot;:&quot;hôtel n.m.&quot;,&quot;translation&quot;:&quot;酒店&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-38&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;hôtel de ville&quot;,&quot;rawTerm&quot;:&quot;hôtel de ville n.m.&quot;,&quot;translation&quot;:&quot;市政府大楼&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-39&quot;,&quot;icon&quot;:&quot;🏫&quot;,&quot;term&quot;:&quot;lycée&quot;,&quot;rawTerm&quot;:&quot;lycée n.m.&quot;,&quot;translation&quot;:&quot;高中&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-40&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;cour&quot;,&quot;rawTerm&quot;:&quot;cour n.f.&quot;,&quot;translation&quot;:&quot;院子&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-41&quot;,&quot;icon&quot;:&quot;🌿&quot;,&quot;term&quot;:&quot;jardin&quot;,&quot;rawTerm&quot;:&quot;jardin n.m.&quot;,&quot;translation&quot;:&quot;花园&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-42&quot;,&quot;icon&quot;:&quot;🅿️&quot;,&quot;term&quot;:&quot;parking&quot;,&quot;rawTerm&quot;:&quot;parking n.m.&quot;,&quot;translation&quot;:&quot;停车场&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-43&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;rez-de-chaussée&quot;,&quot;rawTerm&quot;:&quot;rez-de-chaussée n.m.&quot;,&quot;translation&quot;:&quot;底层，一楼&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-44&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;étage&quot;,&quot;rawTerm&quot;:&quot;étage n.m.&quot;,&quot;translation&quot;:&quot;楼层&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-45&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;immeuble&quot;,&quot;rawTerm&quot;:&quot;immeuble n.m.&quot;,&quot;translation&quot;:&quot;楼房，大楼&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;},{&quot;id&quot;:&quot;w-5-46&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;agence&quot;,&quot;rawTerm&quot;:&quot;agence n.f.&quot;,&quot;translation&quot;:&quot;代理处，机构&quot;,&quot;section&quot;:&quot;方位、地点、城市设施&quot;}]},{&quot;id&quot;:&quot;section-6&quot;,&quot;name&quot;:&quot;外貌、颜色、形容词&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-6-1&quot;,&quot;icon&quot;:&quot;📏&quot;,&quot;term&quot;:&quot;grand(e)&quot;,&quot;rawTerm&quot;:&quot;grand(e) adj.&quot;,&quot;translation&quot;:&quot;高大的，大的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-2&quot;,&quot;icon&quot;:&quot;🤏&quot;,&quot;term&quot;:&quot;petit(e)&quot;,&quot;rawTerm&quot;:&quot;petit(e) adj.&quot;,&quot;translation&quot;:&quot;小的，矮的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-3&quot;,&quot;icon&quot;:&quot;🌱&quot;,&quot;term&quot;:&quot;jeune&quot;,&quot;rawTerm&quot;:&quot;jeune adj.&quot;,&quot;translation&quot;:&quot;年轻的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-4&quot;,&quot;icon&quot;:&quot;🕰️&quot;,&quot;term&quot;:&quot;vieux/vieille&quot;,&quot;rawTerm&quot;:&quot;vieux/vieille adj.&quot;,&quot;translation&quot;:&quot;老的，旧的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-5&quot;,&quot;icon&quot;:&quot;✨&quot;,&quot;term&quot;:&quot;nouveau/nouvelle&quot;,&quot;rawTerm&quot;:&quot;nouveau/nouvelle adj.&quot;,&quot;translation&quot;:&quot;新的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-6&quot;,&quot;icon&quot;:&quot;🌟&quot;,&quot;term&quot;:&quot;beau/belle&quot;,&quot;rawTerm&quot;:&quot;beau/belle adj.&quot;,&quot;translation&quot;:&quot;美丽的，好看的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-7&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;joli(e)&quot;,&quot;rawTerm&quot;:&quot;joli(e) adj.&quot;,&quot;translation&quot;:&quot;漂亮的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-8&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;bon(ne)&quot;,&quot;rawTerm&quot;:&quot;bon(ne) adj.&quot;,&quot;translation&quot;:&quot;好的，正确的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-9&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;sympa&quot;,&quot;rawTerm&quot;:&quot;sympa adj.&quot;,&quot;translation&quot;:&quot;友好的，令人愉快的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-10&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;parfait(e)&quot;,&quot;rawTerm&quot;:&quot;parfait(e) adj.&quot;,&quot;translation&quot;:&quot;完美的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-11&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;intéressant(e)&quot;,&quot;rawTerm&quot;:&quot;intéressant(e) adj.&quot;,&quot;translation&quot;:&quot;有趣的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-12&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;moderne&quot;,&quot;rawTerm&quot;:&quot;moderne adj.&quot;,&quot;translation&quot;:&quot;现代的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-13&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;récent(e)&quot;,&quot;rawTerm&quot;:&quot;récent(e) adj.&quot;,&quot;translation&quot;:&quot;新近的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-14&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;propre&quot;,&quot;rawTerm&quot;:&quot;propre adj.&quot;,&quot;translation&quot;:&quot;干净的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-15&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;clair(e)&quot;,&quot;rawTerm&quot;:&quot;clair(e) adj.&quot;,&quot;translation&quot;:&quot;明亮的，清楚的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-16&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;calme&quot;,&quot;rawTerm&quot;:&quot;calme adj.&quot;,&quot;translation&quot;:&quot;安静的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-17&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;bruyant(e)&quot;,&quot;rawTerm&quot;:&quot;bruyant(e) adj.&quot;,&quot;translation&quot;:&quot;吵闹的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-18&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;lumineux/lumineuse&quot;,&quot;rawTerm&quot;:&quot;lumineux/lumineuse adj.&quot;,&quot;translation&quot;:&quot;明亮的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-19&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;cher/chère&quot;,&quot;rawTerm&quot;:&quot;cher/chère adj.&quot;,&quot;translation&quot;:&quot;贵的；亲爱的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-20&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;gros(se)&quot;,&quot;rawTerm&quot;:&quot;gros(se) adj.&quot;,&quot;translation&quot;:&quot;大的，胖的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-21&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;blond(e)&quot;,&quot;rawTerm&quot;:&quot;blond(e) adj.&quot;,&quot;translation&quot;:&quot;金发的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-22&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;brun(e)&quot;,&quot;rawTerm&quot;:&quot;brun(e) adj.&quot;,&quot;translation&quot;:&quot;棕发的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-23&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;roux/rousse&quot;,&quot;rawTerm&quot;:&quot;roux/rousse adj.&quot;,&quot;translation&quot;:&quot;红发的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-24&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;châtain&quot;,&quot;rawTerm&quot;:&quot;châtain adj.&quot;,&quot;translation&quot;:&quot;栗色头发的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-25&quot;,&quot;icon&quot;:&quot;🟥&quot;,&quot;term&quot;:&quot;rouge&quot;,&quot;rawTerm&quot;:&quot;rouge adj.&quot;,&quot;translation&quot;:&quot;红色的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-26&quot;,&quot;icon&quot;:&quot;🟦&quot;,&quot;term&quot;:&quot;bleu(e)&quot;,&quot;rawTerm&quot;:&quot;bleu(e) adj.&quot;,&quot;translation&quot;:&quot;蓝色的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-27&quot;,&quot;icon&quot;:&quot;⬜&quot;,&quot;term&quot;:&quot;blanc/blanche&quot;,&quot;rawTerm&quot;:&quot;blanc/blanche adj.&quot;,&quot;translation&quot;:&quot;白色的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-28&quot;,&quot;icon&quot;:&quot;⬛&quot;,&quot;term&quot;:&quot;noir(e)&quot;,&quot;rawTerm&quot;:&quot;noir(e) adj.&quot;,&quot;translation&quot;:&quot;黑色的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-29&quot;,&quot;icon&quot;:&quot;🟩&quot;,&quot;term&quot;:&quot;vert(e)&quot;,&quot;rawTerm&quot;:&quot;vert(e) adj.&quot;,&quot;translation&quot;:&quot;绿色的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-30&quot;,&quot;icon&quot;:&quot;◻️&quot;,&quot;term&quot;:&quot;gris(e)&quot;,&quot;rawTerm&quot;:&quot;gris(e) adj.&quot;,&quot;translation&quot;:&quot;灰色的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-31&quot;,&quot;icon&quot;:&quot;🟨&quot;,&quot;term&quot;:&quot;jaune&quot;,&quot;rawTerm&quot;:&quot;jaune adj.&quot;,&quot;translation&quot;:&quot;黄色的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-32&quot;,&quot;icon&quot;:&quot;🟫&quot;,&quot;term&quot;:&quot;marron&quot;,&quot;rawTerm&quot;:&quot;marron adj.&quot;,&quot;translation&quot;:&quot;棕色的&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-33&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;couleur&quot;,&quot;rawTerm&quot;:&quot;couleur n.f.&quot;,&quot;translation&quot;:&quot;颜色&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;},{&quot;id&quot;:&quot;w-6-34&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;taille&quot;,&quot;rawTerm&quot;:&quot;taille n.f.&quot;,&quot;translation&quot;:&quot;尺码，大小&quot;,&quot;section&quot;:&quot;外貌、颜色、形容词&quot;}]},{&quot;id&quot;:&quot;section-7&quot;,&quot;name&quot;:&quot;购物、价格、数量&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-7-1&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;shopping&quot;,&quot;rawTerm&quot;:&quot;shopping n.m.&quot;,&quot;translation&quot;:&quot;购物&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-2&quot;,&quot;icon&quot;:&quot;🛒&quot;,&quot;term&quot;:&quot;acheter&quot;,&quot;rawTerm&quot;:&quot;acheter v.&quot;,&quot;translation&quot;:&quot;买&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-3&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;chercher&quot;,&quot;rawTerm&quot;:&quot;chercher v.&quot;,&quot;translation&quot;:&quot;找，寻找&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-4&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;trouver&quot;,&quot;rawTerm&quot;:&quot;trouver v.&quot;,&quot;translation&quot;:&quot;找到，觉得&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-5&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;coûter&quot;,&quot;rawTerm&quot;:&quot;coûter v.&quot;,&quot;translation&quot;:&quot;花费&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-6&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;vendre&quot;,&quot;rawTerm&quot;:&quot;vendre v.&quot;,&quot;translation&quot;:&quot;卖&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-7&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;porter&quot;,&quot;rawTerm&quot;:&quot;porter v.&quot;,&quot;translation&quot;:&quot;穿，戴&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-8&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;mettre&quot;,&quot;rawTerm&quot;:&quot;mettre v.&quot;,&quot;translation&quot;:&quot;穿上，放&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-9&quot;,&quot;icon&quot;:&quot;🏷️&quot;,&quot;term&quot;:&quot;prix&quot;,&quot;rawTerm&quot;:&quot;prix n.m.&quot;,&quot;translation&quot;:&quot;价格&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-10&quot;,&quot;icon&quot;:&quot;💶&quot;,&quot;term&quot;:&quot;euro&quot;,&quot;rawTerm&quot;:&quot;euro n.m.&quot;,&quot;translation&quot;:&quot;欧元&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-11&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;centime&quot;,&quot;rawTerm&quot;:&quot;centime n.m.&quot;,&quot;translation&quot;:&quot;欧分&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-12&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;combien&quot;,&quot;rawTerm&quot;:&quot;combien&quot;,&quot;translation&quot;:&quot;多少&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-13&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;quel/quelle/quels/quelles&quot;,&quot;rawTerm&quot;:&quot;quel/quelle/quels/quelles&quot;,&quot;translation&quot;:&quot;哪个，什么样的&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-14&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;type&quot;,&quot;rawTerm&quot;:&quot;type n.m.&quot;,&quot;translation&quot;:&quot;类型&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-15&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;pointure&quot;,&quot;rawTerm&quot;:&quot;pointure n.f.&quot;,&quot;translation&quot;:&quot;鞋码&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-16&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;très&quot;,&quot;rawTerm&quot;:&quot;très adv.&quot;,&quot;translation&quot;:&quot;很，非常&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-17&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;trop&quot;,&quot;rawTerm&quot;:&quot;trop adv.&quot;,&quot;translation&quot;:&quot;太，过于&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-18&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;bien&quot;,&quot;rawTerm&quot;:&quot;bien adv.&quot;,&quot;translation&quot;:&quot;很，好&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-19&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;beaucoup&quot;,&quot;rawTerm&quot;:&quot;beaucoup adv.&quot;,&quot;translation&quot;:&quot;很多，非常&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-20&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;un peu&quot;,&quot;rawTerm&quot;:&quot;un peu&quot;,&quot;translation&quot;:&quot;一点儿&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-21&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;pas du tout&quot;,&quot;rawTerm&quot;:&quot;pas du tout&quot;,&quot;translation&quot;:&quot;一点也不&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-22&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;voilà&quot;,&quot;rawTerm&quot;:&quot;voilà&quot;,&quot;translation&quot;:&quot;这就是，给您&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-23&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;tout(e) adj./pron.&quot;,&quot;rawTerm&quot;:&quot;tout(e) adj./pron.&quot;,&quot;translation&quot;:&quot;全部，所有&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-24&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;faire&quot;,&quot;rawTerm&quot;:&quot;faire v.&quot;,&quot;translation&quot;:&quot;做，值&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-25&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;prendre&quot;,&quot;rawTerm&quot;:&quot;prendre v.&quot;,&quot;translation&quot;:&quot;拿，乘坐，买&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;},{&quot;id&quot;:&quot;w-7-26&quot;,&quot;icon&quot;:&quot;🛍️&quot;,&quot;term&quot;:&quot;compter&quot;,&quot;rawTerm&quot;:&quot;compter v.&quot;,&quot;translation&quot;:&quot;数，计算&quot;,&quot;section&quot;:&quot;购物、价格、数量&quot;}]},{&quot;id&quot;:&quot;section-8&quot;,&quot;name&quot;:&quot;艺术、兴趣、文化&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-8-1&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;art&quot;,&quot;rawTerm&quot;:&quot;art n.m.&quot;,&quot;translation&quot;:&quot;艺术，美术&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-2&quot;,&quot;icon&quot;:&quot;🎨&quot;,&quot;term&quot;:&quot;artiste&quot;,&quot;rawTerm&quot;:&quot;artiste n.&quot;,&quot;translation&quot;:&quot;艺术家&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-3&quot;,&quot;icon&quot;:&quot;🎬&quot;,&quot;term&quot;:&quot;cinéma&quot;,&quot;rawTerm&quot;:&quot;cinéma n.m.&quot;,&quot;translation&quot;:&quot;电影，电影院&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-4&quot;,&quot;icon&quot;:&quot;🎬&quot;,&quot;term&quot;:&quot;film&quot;,&quot;rawTerm&quot;:&quot;film n.m.&quot;,&quot;translation&quot;:&quot;电影&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-5&quot;,&quot;icon&quot;:&quot;📷&quot;,&quot;term&quot;:&quot;photo&quot;,&quot;rawTerm&quot;:&quot;photo n.f.&quot;,&quot;translation&quot;:&quot;照片&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-6&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;term&quot;:&quot;photographie&quot;,&quot;rawTerm&quot;:&quot;photographie n.f.&quot;,&quot;translation&quot;:&quot;摄影，照片&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-7&quot;,&quot;icon&quot;:&quot;🎵&quot;,&quot;term&quot;:&quot;musique&quot;,&quot;rawTerm&quot;:&quot;musique n.f.&quot;,&quot;translation&quot;:&quot;音乐&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-8&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;term&quot;:&quot;classique&quot;,&quot;rawTerm&quot;:&quot;classique adj.&quot;,&quot;translation&quot;:&quot;古典的，经典的&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-9&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;sport&quot;,&quot;rawTerm&quot;:&quot;sport n.m.&quot;,&quot;translation&quot;:&quot;运动&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-10&quot;,&quot;icon&quot;:&quot;🌿&quot;,&quot;term&quot;:&quot;nature&quot;,&quot;rawTerm&quot;:&quot;nature n.f.&quot;,&quot;translation&quot;:&quot;自然&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-11&quot;,&quot;icon&quot;:&quot;📖&quot;,&quot;term&quot;:&quot;lecture&quot;,&quot;rawTerm&quot;:&quot;lecture n.f.&quot;,&quot;translation&quot;:&quot;阅读&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-12&quot;,&quot;icon&quot;:&quot;✏️&quot;,&quot;term&quot;:&quot;dessin&quot;,&quot;rawTerm&quot;:&quot;dessin n.m.&quot;,&quot;translation&quot;:&quot;画，绘画&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-13&quot;,&quot;icon&quot;:&quot;🖼️&quot;,&quot;term&quot;:&quot;tableau&quot;,&quot;rawTerm&quot;:&quot;tableau n.m.&quot;,&quot;translation&quot;:&quot;画，表格&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-14&quot;,&quot;icon&quot;:&quot;📜&quot;,&quot;term&quot;:&quot;poème&quot;,&quot;rawTerm&quot;:&quot;poème n.m.&quot;,&quot;translation&quot;:&quot;诗&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-15&quot;,&quot;icon&quot;:&quot;🏛️&quot;,&quot;term&quot;:&quot;musée&quot;,&quot;rawTerm&quot;:&quot;musée n.m.&quot;,&quot;translation&quot;:&quot;博物馆&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-16&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;term&quot;:&quot;peinture&quot;,&quot;rawTerm&quot;:&quot;peinture n.f.&quot;,&quot;translation&quot;:&quot;绘画&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-17&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;term&quot;:&quot;sculpture&quot;,&quot;rawTerm&quot;:&quot;sculpture n.f.&quot;,&quot;translation&quot;:&quot;雕塑&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-18&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;term&quot;:&quot;aimer&quot;,&quot;rawTerm&quot;:&quot;aimer v.&quot;,&quot;translation&quot;:&quot;喜欢，爱&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-19&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;term&quot;:&quot;préférer&quot;,&quot;rawTerm&quot;:&quot;préférer v.&quot;,&quot;translation&quot;:&quot;更喜欢&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;},{&quot;id&quot;:&quot;w-8-20&quot;,&quot;icon&quot;:&quot;🎭&quot;,&quot;term&quot;:&quot;visiter&quot;,&quot;rawTerm&quot;:&quot;visiter v.&quot;,&quot;translation&quot;:&quot;参观，游览&quot;,&quot;section&quot;:&quot;艺术、兴趣、文化&quot;}]},{&quot;id&quot;:&quot;section-9&quot;,&quot;name&quot;:&quot;交通、旅行、方向&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-9-1&quot;,&quot;icon&quot;:&quot;➡️&quot;,&quot;term&quot;:&quot;aller&quot;,&quot;rawTerm&quot;:&quot;aller v.&quot;,&quot;translation&quot;:&quot;去&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-2&quot;,&quot;icon&quot;:&quot;⬅️&quot;,&quot;term&quot;:&quot;venir&quot;,&quot;rawTerm&quot;:&quot;venir v.&quot;,&quot;translation&quot;:&quot;来&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-3&quot;,&quot;icon&quot;:&quot;🚶&quot;,&quot;term&quot;:&quot;partir&quot;,&quot;rawTerm&quot;:&quot;partir v.&quot;,&quot;translation&quot;:&quot;出发，离开&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-4&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;arriver&quot;,&quot;rawTerm&quot;:&quot;arriver v.&quot;,&quot;translation&quot;:&quot;到达&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-5&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;prendre&quot;,&quot;rawTerm&quot;:&quot;prendre v.&quot;,&quot;translation&quot;:&quot;乘坐，拿&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-6&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;continuer&quot;,&quot;rawTerm&quot;:&quot;continuer v.&quot;,&quot;translation&quot;:&quot;继续&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-7&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;traverser&quot;,&quot;rawTerm&quot;:&quot;traverser v.&quot;,&quot;translation&quot;:&quot;穿过&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-8&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;tourner&quot;,&quot;rawTerm&quot;:&quot;tourner v.&quot;,&quot;translation&quot;:&quot;转弯&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-9&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;passer&quot;,&quot;rawTerm&quot;:&quot;passer v.&quot;,&quot;translation&quot;:&quot;经过&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-10&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;entrer&quot;,&quot;rawTerm&quot;:&quot;entrer v.&quot;,&quot;translation&quot;:&quot;进入&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-11&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;sortir&quot;,&quot;rawTerm&quot;:&quot;sortir v.&quot;,&quot;translation&quot;:&quot;出去&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-12&quot;,&quot;icon&quot;:&quot;🚶&quot;,&quot;term&quot;:&quot;à pied&quot;,&quot;rawTerm&quot;:&quot;à pied&quot;,&quot;translation&quot;:&quot;步行&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-13&quot;,&quot;icon&quot;:&quot;🚲&quot;,&quot;term&quot;:&quot;à vélo&quot;,&quot;rawTerm&quot;:&quot;à vélo&quot;,&quot;translation&quot;:&quot;骑自行车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-14&quot;,&quot;icon&quot;:&quot;🏍️&quot;,&quot;term&quot;:&quot;à moto&quot;,&quot;rawTerm&quot;:&quot;à moto&quot;,&quot;translation&quot;:&quot;骑摩托车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-15&quot;,&quot;icon&quot;:&quot;🚗&quot;,&quot;term&quot;:&quot;en voiture&quot;,&quot;rawTerm&quot;:&quot;en voiture&quot;,&quot;translation&quot;:&quot;坐汽车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-16&quot;,&quot;icon&quot;:&quot;🚌&quot;,&quot;term&quot;:&quot;en bus&quot;,&quot;rawTerm&quot;:&quot;en bus&quot;,&quot;translation&quot;:&quot;坐公交车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-17&quot;,&quot;icon&quot;:&quot;🚇&quot;,&quot;term&quot;:&quot;en métro&quot;,&quot;rawTerm&quot;:&quot;en métro&quot;,&quot;translation&quot;:&quot;坐地铁&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-18&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;en train&quot;,&quot;rawTerm&quot;:&quot;en train&quot;,&quot;translation&quot;:&quot;坐火车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-19&quot;,&quot;icon&quot;:&quot;✈️&quot;,&quot;term&quot;:&quot;en avion&quot;,&quot;rawTerm&quot;:&quot;en avion&quot;,&quot;translation&quot;:&quot;坐飞机&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-20&quot;,&quot;icon&quot;:&quot;⛵&quot;,&quot;term&quot;:&quot;en bateau&quot;,&quot;rawTerm&quot;:&quot;en bateau&quot;,&quot;translation&quot;:&quot;坐船&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-21&quot;,&quot;icon&quot;:&quot;🚌&quot;,&quot;term&quot;:&quot;bus&quot;,&quot;rawTerm&quot;:&quot;bus n.m.&quot;,&quot;translation&quot;:&quot;公共汽车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-22&quot;,&quot;icon&quot;:&quot;🚇&quot;,&quot;term&quot;:&quot;métro&quot;,&quot;rawTerm&quot;:&quot;métro n.m.&quot;,&quot;translation&quot;:&quot;地铁&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-23&quot;,&quot;icon&quot;:&quot;🚲&quot;,&quot;term&quot;:&quot;vélo&quot;,&quot;rawTerm&quot;:&quot;vélo n.m.&quot;,&quot;translation&quot;:&quot;自行车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-24&quot;,&quot;icon&quot;:&quot;🚗&quot;,&quot;term&quot;:&quot;voiture&quot;,&quot;rawTerm&quot;:&quot;voiture n.f.&quot;,&quot;translation&quot;:&quot;汽车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-25&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;train&quot;,&quot;rawTerm&quot;:&quot;train n.m.&quot;,&quot;translation&quot;:&quot;火车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-26&quot;,&quot;icon&quot;:&quot;✈️&quot;,&quot;term&quot;:&quot;avion&quot;,&quot;rawTerm&quot;:&quot;avion n.m.&quot;,&quot;translation&quot;:&quot;飞机&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-27&quot;,&quot;icon&quot;:&quot;⛵&quot;,&quot;term&quot;:&quot;bateau&quot;,&quot;rawTerm&quot;:&quot;bateau n.m.&quot;,&quot;translation&quot;:&quot;船&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-28&quot;,&quot;icon&quot;:&quot;🚁&quot;,&quot;term&quot;:&quot;hélicoptère&quot;,&quot;rawTerm&quot;:&quot;hélicoptère n.m.&quot;,&quot;translation&quot;:&quot;直升机&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-29&quot;,&quot;icon&quot;:&quot;✈️&quot;,&quot;term&quot;:&quot;aéroport&quot;,&quot;rawTerm&quot;:&quot;aéroport n.m.&quot;,&quot;translation&quot;:&quot;机场&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-30&quot;,&quot;icon&quot;:&quot;⚓&quot;,&quot;term&quot;:&quot;port&quot;,&quot;rawTerm&quot;:&quot;port n.m.&quot;,&quot;translation&quot;:&quot;港口&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-31&quot;,&quot;icon&quot;:&quot;🚉&quot;,&quot;term&quot;:&quot;quai&quot;,&quot;rawTerm&quot;:&quot;quai n.m.&quot;,&quot;translation&quot;:&quot;站台，码头&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-32&quot;,&quot;icon&quot;:&quot;🎫&quot;,&quot;term&quot;:&quot;billet&quot;,&quot;rawTerm&quot;:&quot;billet n.m.&quot;,&quot;translation&quot;:&quot;票&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-33&quot;,&quot;icon&quot;:&quot;🧳&quot;,&quot;term&quot;:&quot;voyage&quot;,&quot;rawTerm&quot;:&quot;voyage n.m.&quot;,&quot;translation&quot;:&quot;旅行&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-34&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;circuit&quot;,&quot;rawTerm&quot;:&quot;circuit n.m.&quot;,&quot;translation&quot;:&quot;旅游线路&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-35&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;destination&quot;,&quot;rawTerm&quot;:&quot;destination n.f.&quot;,&quot;translation&quot;:&quot;目的地&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-36&quot;,&quot;icon&quot;:&quot;📏&quot;,&quot;term&quot;:&quot;kilomètre&quot;,&quot;rawTerm&quot;:&quot;kilomètre n.m.&quot;,&quot;translation&quot;:&quot;千米&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-37&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;vitesse&quot;,&quot;rawTerm&quot;:&quot;vitesse n.f.&quot;,&quot;translation&quot;:&quot;速度&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-38&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;SNCF&quot;,&quot;rawTerm&quot;:&quot;SNCF n.f.&quot;,&quot;translation&quot;:&quot;法国国营铁路公司&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;},{&quot;id&quot;:&quot;w-9-39&quot;,&quot;icon&quot;:&quot;🚆&quot;,&quot;term&quot;:&quot;TGV&quot;,&quot;rawTerm&quot;:&quot;TGV n.m.&quot;,&quot;translation&quot;:&quot;高速火车&quot;,&quot;section&quot;:&quot;交通、旅行、方向&quot;}]},{&quot;id&quot;:&quot;section-10&quot;,&quot;name&quot;:&quot;自然、地理、旅游地点&quot;,&quot;icon&quot;:&quot;🌊&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-10-1&quot;,&quot;icon&quot;:&quot;🌊&quot;,&quot;term&quot;:&quot;mer&quot;,&quot;rawTerm&quot;:&quot;mer n.f.&quot;,&quot;translation&quot;:&quot;大海&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-2&quot;,&quot;icon&quot;:&quot;🏖️&quot;,&quot;term&quot;:&quot;plage&quot;,&quot;rawTerm&quot;:&quot;plage n.f.&quot;,&quot;translation&quot;:&quot;沙滩&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-3&quot;,&quot;icon&quot;:&quot;🏊&quot;,&quot;term&quot;:&quot;piscine&quot;,&quot;rawTerm&quot;:&quot;piscine n.f.&quot;,&quot;translation&quot;:&quot;游泳池&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-4&quot;,&quot;icon&quot;:&quot;🌤️&quot;,&quot;term&quot;:&quot;terrasse&quot;,&quot;rawTerm&quot;:&quot;terrasse n.f.&quot;,&quot;translation&quot;:&quot;露台&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-5&quot;,&quot;icon&quot;:&quot;🏝️&quot;,&quot;term&quot;:&quot;île&quot;,&quot;rawTerm&quot;:&quot;île n.f.&quot;,&quot;translation&quot;:&quot;岛&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-6&quot;,&quot;icon&quot;:&quot;⛰️&quot;,&quot;term&quot;:&quot;montagne&quot;,&quot;rawTerm&quot;:&quot;montagne n.f.&quot;,&quot;translation&quot;:&quot;山&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-7&quot;,&quot;icon&quot;:&quot;⬇️&quot;,&quot;term&quot;:&quot;sud&quot;,&quot;rawTerm&quot;:&quot;sud n.m.&quot;,&quot;translation&quot;:&quot;南方，南边&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-8&quot;,&quot;icon&quot;:&quot;⬆️&quot;,&quot;term&quot;:&quot;nord&quot;,&quot;rawTerm&quot;:&quot;nord n.m.&quot;,&quot;translation&quot;:&quot;北方，北边&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-9&quot;,&quot;icon&quot;:&quot;⬅️&quot;,&quot;term&quot;:&quot;ouest&quot;,&quot;rawTerm&quot;:&quot;ouest n.m.&quot;,&quot;translation&quot;:&quot;西方，西边&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-10&quot;,&quot;icon&quot;:&quot;➡️&quot;,&quot;term&quot;:&quot;est&quot;,&quot;rawTerm&quot;:&quot;est n.m.&quot;,&quot;translation&quot;:&quot;东方，东边&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-11&quot;,&quot;icon&quot;:&quot;🌊&quot;,&quot;term&quot;:&quot;bord&quot;,&quot;rawTerm&quot;:&quot;bord n.m.&quot;,&quot;translation&quot;:&quot;边，边缘&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-12&quot;,&quot;icon&quot;:&quot;☀️&quot;,&quot;term&quot;:&quot;jour&quot;,&quot;rawTerm&quot;:&quot;jour n.m.&quot;,&quot;translation&quot;:&quot;日子，天&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-13&quot;,&quot;icon&quot;:&quot;📅&quot;,&quot;term&quot;:&quot;week-end&quot;,&quot;rawTerm&quot;:&quot;week-end n.m.&quot;,&quot;translation&quot;:&quot;周末&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-14&quot;,&quot;icon&quot;:&quot;💨&quot;,&quot;term&quot;:&quot;air&quot;,&quot;rawTerm&quot;:&quot;air n.m.&quot;,&quot;translation&quot;:&quot;空气&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-15&quot;,&quot;icon&quot;:&quot;🌊&quot;,&quot;term&quot;:&quot;air conditionné&quot;,&quot;rawTerm&quot;:&quot;air conditionné n.m.&quot;,&quot;translation&quot;:&quot;空调&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-16&quot;,&quot;icon&quot;:&quot;🐠&quot;,&quot;term&quot;:&quot;aquarium&quot;,&quot;rawTerm&quot;:&quot;aquarium n.m.&quot;,&quot;translation&quot;:&quot;水族馆&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-17&quot;,&quot;icon&quot;:&quot;🌊&quot;,&quot;term&quot;:&quot;archéologie&quot;,&quot;rawTerm&quot;:&quot;archéologie n.f.&quot;,&quot;translation&quot;:&quot;考古学&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-18&quot;,&quot;icon&quot;:&quot;🏰&quot;,&quot;term&quot;:&quot;château&quot;,&quot;rawTerm&quot;:&quot;château n.m.&quot;,&quot;translation&quot;:&quot;城堡&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-19&quot;,&quot;icon&quot;:&quot;🔒&quot;,&quot;term&quot;:&quot;prison&quot;,&quot;rawTerm&quot;:&quot;prison n.f.&quot;,&quot;translation&quot;:&quot;监狱&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-20&quot;,&quot;icon&quot;:&quot;🏛️&quot;,&quot;term&quot;:&quot;palais&quot;,&quot;rawTerm&quot;:&quot;palais n.m.&quot;,&quot;translation&quot;:&quot;宫殿&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-21&quot;,&quot;icon&quot;:&quot;⛪&quot;,&quot;term&quot;:&quot;cathédrale&quot;,&quot;rawTerm&quot;:&quot;cathédrale n.f.&quot;,&quot;translation&quot;:&quot;大教堂&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-22&quot;,&quot;icon&quot;:&quot;🧳&quot;,&quot;term&quot;:&quot;tourisme&quot;,&quot;rawTerm&quot;:&quot;tourisme n.m.&quot;,&quot;translation&quot;:&quot;旅游业&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-23&quot;,&quot;icon&quot;:&quot;🌊&quot;,&quot;term&quot;:&quot;office&quot;,&quot;rawTerm&quot;:&quot;office n.m.&quot;,&quot;translation&quot;:&quot;办公室，机构&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;},{&quot;id&quot;:&quot;w-10-24&quot;,&quot;icon&quot;:&quot;🌊&quot;,&quot;term&quot;:&quot;office de tourisme&quot;,&quot;rawTerm&quot;:&quot;office de tourisme&quot;,&quot;translation&quot;:&quot;旅游咨询中心&quot;,&quot;section&quot;:&quot;自然、地理、旅游地点&quot;}]},{&quot;id&quot;:&quot;section-11&quot;,&quot;name&quot;:&quot;常用代词、疑问词、小词&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-11-1&quot;,&quot;icon&quot;:&quot;🙋&quot;,&quot;term&quot;:&quot;je&quot;,&quot;rawTerm&quot;:&quot;je&quot;,&quot;translation&quot;:&quot;我&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-2&quot;,&quot;icon&quot;:&quot;👉&quot;,&quot;term&quot;:&quot;tu&quot;,&quot;rawTerm&quot;:&quot;tu&quot;,&quot;translation&quot;:&quot;你&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-3&quot;,&quot;icon&quot;:&quot;👨&quot;,&quot;term&quot;:&quot;il&quot;,&quot;rawTerm&quot;:&quot;il&quot;,&quot;translation&quot;:&quot;他，它&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-4&quot;,&quot;icon&quot;:&quot;👩&quot;,&quot;term&quot;:&quot;elle&quot;,&quot;rawTerm&quot;:&quot;elle&quot;,&quot;translation&quot;:&quot;她，它&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-5&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;nous&quot;,&quot;rawTerm&quot;:&quot;nous&quot;,&quot;translation&quot;:&quot;我们&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-6&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;vous&quot;,&quot;rawTerm&quot;:&quot;vous&quot;,&quot;translation&quot;:&quot;你们；您&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-7&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;ils&quot;,&quot;rawTerm&quot;:&quot;ils&quot;,&quot;translation&quot;:&quot;他们&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-8&quot;,&quot;icon&quot;:&quot;👥&quot;,&quot;term&quot;:&quot;elles&quot;,&quot;rawTerm&quot;:&quot;elles&quot;,&quot;translation&quot;:&quot;她们&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-9&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;on&quot;,&quot;rawTerm&quot;:&quot;on&quot;,&quot;translation&quot;:&quot;我们；人们；有人&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-10&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;ce/c’&quot;,&quot;rawTerm&quot;:&quot;ce/c’&quot;,&quot;translation&quot;:&quot;这，那&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-11&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;qui&quot;,&quot;rawTerm&quot;:&quot;qui&quot;,&quot;translation&quot;:&quot;谁&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-12&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;que/qu’&quot;,&quot;rawTerm&quot;:&quot;que/qu’&quot;,&quot;translation&quot;:&quot;什么&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-13&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;quoi&quot;,&quot;rawTerm&quot;:&quot;quoi&quot;,&quot;translation&quot;:&quot;什么&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-14&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;où&quot;,&quot;rawTerm&quot;:&quot;où&quot;,&quot;translation&quot;:&quot;哪里&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-15&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;comment&quot;,&quot;rawTerm&quot;:&quot;comment&quot;,&quot;translation&quot;:&quot;怎样，如何&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-16&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;combien&quot;,&quot;rawTerm&quot;:&quot;combien&quot;,&quot;translation&quot;:&quot;多少&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-17&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;pourquoi&quot;,&quot;rawTerm&quot;:&quot;pourquoi&quot;,&quot;translation&quot;:&quot;为什么&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-18&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;parce que&quot;,&quot;rawTerm&quot;:&quot;parce que&quot;,&quot;translation&quot;:&quot;因为&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-19&quot;,&quot;icon&quot;:&quot;✅&quot;,&quot;term&quot;:&quot;oui&quot;,&quot;rawTerm&quot;:&quot;oui&quot;,&quot;translation&quot;:&quot;是的&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-20&quot;,&quot;icon&quot;:&quot;❌&quot;,&quot;term&quot;:&quot;non&quot;,&quot;rawTerm&quot;:&quot;non&quot;,&quot;translation&quot;:&quot;不，不是&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-21&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;aussi&quot;,&quot;rawTerm&quot;:&quot;aussi&quot;,&quot;translation&quot;:&quot;也&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-22&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;alors&quot;,&quot;rawTerm&quot;:&quot;alors&quot;,&quot;translation&quot;:&quot;那么，于是&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-23&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;maintenant&quot;,&quot;rawTerm&quot;:&quot;maintenant&quot;,&quot;translation&quot;:&quot;现在&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-24&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;puis&quot;,&quot;rawTerm&quot;:&quot;puis&quot;,&quot;translation&quot;:&quot;然后&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-25&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;juste&quot;,&quot;rawTerm&quot;:&quot;juste&quot;,&quot;translation&quot;:&quot;正好，恰好&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-26&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;bien sûr&quot;,&quot;rawTerm&quot;:&quot;bien sûr&quot;,&quot;translation&quot;:&quot;当然&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-27&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;avec&quot;,&quot;rawTerm&quot;:&quot;avec&quot;,&quot;translation&quot;:&quot;和，带有&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-28&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;mais&quot;,&quot;rawTerm&quot;:&quot;mais&quot;,&quot;translation&quot;:&quot;但是&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-29&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;et&quot;,&quot;rawTerm&quot;:&quot;et&quot;,&quot;translation&quot;:&quot;和，并且&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-30&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;ou&quot;,&quot;rawTerm&quot;:&quot;ou&quot;,&quot;translation&quot;:&quot;或者&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-31&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;de/des/du/de la&quot;,&quot;rawTerm&quot;:&quot;de/des/du/de la&quot;,&quot;translation&quot;:&quot;……的；从……&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;},{&quot;id&quot;:&quot;w-11-32&quot;,&quot;icon&quot;:&quot;❓&quot;,&quot;term&quot;:&quot;à/au/aux&quot;,&quot;rawTerm&quot;:&quot;à/au/aux&quot;,&quot;translation&quot;:&quot;在，到，向&quot;,&quot;section&quot;:&quot;常用代词、疑问词、小词&quot;}]},{&quot;id&quot;:&quot;section-12&quot;,&quot;name&quot;:&quot;必背动词总表&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-12-1&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;être&quot;,&quot;rawTerm&quot;:&quot;être&quot;,&quot;translation&quot;:&quot;是，在&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-2&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;avoir&quot;,&quot;rawTerm&quot;:&quot;avoir&quot;,&quot;translation&quot;:&quot;有&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-3&quot;,&quot;icon&quot;:&quot;➡️&quot;,&quot;term&quot;:&quot;aller&quot;,&quot;rawTerm&quot;:&quot;aller&quot;,&quot;translation&quot;:&quot;去&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-4&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;s’appeler&quot;,&quot;rawTerm&quot;:&quot;s’appeler&quot;,&quot;translation&quot;:&quot;名叫&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-5&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;habiter&quot;,&quot;rawTerm&quot;:&quot;habiter&quot;,&quot;translation&quot;:&quot;居住&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-6&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;parler&quot;,&quot;rawTerm&quot;:&quot;parler&quot;,&quot;translation&quot;:&quot;说，讲&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-7&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;aimer&quot;,&quot;rawTerm&quot;:&quot;aimer&quot;,&quot;translation&quot;:&quot;喜欢，爱&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-8&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;préférer&quot;,&quot;rawTerm&quot;:&quot;préférer&quot;,&quot;translation&quot;:&quot;更喜欢&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-9&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;demander&quot;,&quot;rawTerm&quot;:&quot;demander&quot;,&quot;translation&quot;:&quot;问，请求&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-10&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;chercher&quot;,&quot;rawTerm&quot;:&quot;chercher&quot;,&quot;translation&quot;:&quot;找&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-11&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;trouver&quot;,&quot;rawTerm&quot;:&quot;trouver&quot;,&quot;translation&quot;:&quot;找到，认为&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-12&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;porter&quot;,&quot;rawTerm&quot;:&quot;porter&quot;,&quot;translation&quot;:&quot;穿，戴&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-13&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;mettre&quot;,&quot;rawTerm&quot;:&quot;mettre&quot;,&quot;translation&quot;:&quot;放，穿上&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-14&quot;,&quot;icon&quot;:&quot;🛒&quot;,&quot;term&quot;:&quot;acheter&quot;,&quot;rawTerm&quot;:&quot;acheter&quot;,&quot;translation&quot;:&quot;买&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-15&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;vendre&quot;,&quot;rawTerm&quot;:&quot;vendre&quot;,&quot;translation&quot;:&quot;卖&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-16&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;coûter&quot;,&quot;rawTerm&quot;:&quot;coûter&quot;,&quot;translation&quot;:&quot;花费&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-17&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;faire&quot;,&quot;rawTerm&quot;:&quot;faire&quot;,&quot;translation&quot;:&quot;做，值&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-18&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;prendre&quot;,&quot;rawTerm&quot;:&quot;prendre&quot;,&quot;translation&quot;:&quot;拿，乘坐&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-19&quot;,&quot;icon&quot;:&quot;⬅️&quot;,&quot;term&quot;:&quot;venir&quot;,&quot;rawTerm&quot;:&quot;venir&quot;,&quot;translation&quot;:&quot;来&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-20&quot;,&quot;icon&quot;:&quot;🚶&quot;,&quot;term&quot;:&quot;partir&quot;,&quot;rawTerm&quot;:&quot;partir&quot;,&quot;translation&quot;:&quot;出发，离开&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-21&quot;,&quot;icon&quot;:&quot;📍&quot;,&quot;term&quot;:&quot;arriver&quot;,&quot;rawTerm&quot;:&quot;arriver&quot;,&quot;translation&quot;:&quot;到达&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-22&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;visiter&quot;,&quot;rawTerm&quot;:&quot;visiter&quot;,&quot;translation&quot;:&quot;参观，游览&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-23&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;continuer&quot;,&quot;rawTerm&quot;:&quot;continuer&quot;,&quot;translation&quot;:&quot;继续&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-24&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;traverser&quot;,&quot;rawTerm&quot;:&quot;traverser&quot;,&quot;translation&quot;:&quot;穿过&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-25&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;tourner&quot;,&quot;rawTerm&quot;:&quot;tourner&quot;,&quot;translation&quot;:&quot;转弯&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-26&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;passer&quot;,&quot;rawTerm&quot;:&quot;passer&quot;,&quot;translation&quot;:&quot;经过&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-27&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;entrer&quot;,&quot;rawTerm&quot;:&quot;entrer&quot;,&quot;translation&quot;:&quot;进入&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-28&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;sortir&quot;,&quot;rawTerm&quot;:&quot;sortir&quot;,&quot;translation&quot;:&quot;出去&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-29&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;lire&quot;,&quot;rawTerm&quot;:&quot;lire&quot;,&quot;translation&quot;:&quot;读&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-30&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;écrire&quot;,&quot;rawTerm&quot;:&quot;écrire&quot;,&quot;translation&quot;:&quot;写&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-31&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;voir&quot;,&quot;rawTerm&quot;:&quot;voir&quot;,&quot;translation&quot;:&quot;看见&quot;,&quot;section&quot;:&quot;必背动词总表&quot;},{&quot;id&quot;:&quot;w-12-32&quot;,&quot;icon&quot;:&quot;🏃&quot;,&quot;term&quot;:&quot;compter&quot;,&quot;rawTerm&quot;:&quot;compter&quot;,&quot;translation&quot;:&quot;数，计算&quot;,&quot;section&quot;:&quot;必背动词总表&quot;}]},{&quot;id&quot;:&quot;section-13&quot;,&quot;name&quot;:&quot;数字：至少要熟到 0–100&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;items&quot;:[{&quot;id&quot;:&quot;w-13-1&quot;,&quot;icon&quot;:&quot;0&quot;,&quot;term&quot;:&quot;zéro&quot;,&quot;rawTerm&quot;:&quot;zéro&quot;,&quot;translation&quot;:&quot;0&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-2&quot;,&quot;icon&quot;:&quot;1&quot;,&quot;term&quot;:&quot;un/une&quot;,&quot;rawTerm&quot;:&quot;un/une&quot;,&quot;translation&quot;:&quot;1&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-3&quot;,&quot;icon&quot;:&quot;2&quot;,&quot;term&quot;:&quot;deux&quot;,&quot;rawTerm&quot;:&quot;deux&quot;,&quot;translation&quot;:&quot;2&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-4&quot;,&quot;icon&quot;:&quot;3&quot;,&quot;term&quot;:&quot;trois&quot;,&quot;rawTerm&quot;:&quot;trois&quot;,&quot;translation&quot;:&quot;3&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-5&quot;,&quot;icon&quot;:&quot;4&quot;,&quot;term&quot;:&quot;quatre&quot;,&quot;rawTerm&quot;:&quot;quatre&quot;,&quot;translation&quot;:&quot;4&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-6&quot;,&quot;icon&quot;:&quot;5&quot;,&quot;term&quot;:&quot;cinq&quot;,&quot;rawTerm&quot;:&quot;cinq&quot;,&quot;translation&quot;:&quot;5&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-7&quot;,&quot;icon&quot;:&quot;6&quot;,&quot;term&quot;:&quot;six&quot;,&quot;rawTerm&quot;:&quot;six&quot;,&quot;translation&quot;:&quot;6&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-8&quot;,&quot;icon&quot;:&quot;7&quot;,&quot;term&quot;:&quot;sept&quot;,&quot;rawTerm&quot;:&quot;sept&quot;,&quot;translation&quot;:&quot;7&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-9&quot;,&quot;icon&quot;:&quot;8&quot;,&quot;term&quot;:&quot;huit&quot;,&quot;rawTerm&quot;:&quot;huit&quot;,&quot;translation&quot;:&quot;8&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-10&quot;,&quot;icon&quot;:&quot;9&quot;,&quot;term&quot;:&quot;neuf&quot;,&quot;rawTerm&quot;:&quot;neuf&quot;,&quot;translation&quot;:&quot;9&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-11&quot;,&quot;icon&quot;:&quot;10&quot;,&quot;term&quot;:&quot;dix&quot;,&quot;rawTerm&quot;:&quot;dix&quot;,&quot;translation&quot;:&quot;10&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-12&quot;,&quot;icon&quot;:&quot;11&quot;,&quot;term&quot;:&quot;onze&quot;,&quot;rawTerm&quot;:&quot;onze&quot;,&quot;translation&quot;:&quot;11&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-13&quot;,&quot;icon&quot;:&quot;12&quot;,&quot;term&quot;:&quot;douze&quot;,&quot;rawTerm&quot;:&quot;douze&quot;,&quot;translation&quot;:&quot;12&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-14&quot;,&quot;icon&quot;:&quot;13&quot;,&quot;term&quot;:&quot;treize&quot;,&quot;rawTerm&quot;:&quot;treize&quot;,&quot;translation&quot;:&quot;13&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-15&quot;,&quot;icon&quot;:&quot;14&quot;,&quot;term&quot;:&quot;quatorze&quot;,&quot;rawTerm&quot;:&quot;quatorze&quot;,&quot;translation&quot;:&quot;14&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-16&quot;,&quot;icon&quot;:&quot;15&quot;,&quot;term&quot;:&quot;quinze&quot;,&quot;rawTerm&quot;:&quot;quinze&quot;,&quot;translation&quot;:&quot;15&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-17&quot;,&quot;icon&quot;:&quot;16&quot;,&quot;term&quot;:&quot;seize&quot;,&quot;rawTerm&quot;:&quot;seize&quot;,&quot;translation&quot;:&quot;16&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-18&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;dix-sept&quot;,&quot;rawTerm&quot;:&quot;dix-sept&quot;,&quot;translation&quot;:&quot;17&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-19&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;dix-huit&quot;,&quot;rawTerm&quot;:&quot;dix-huit&quot;,&quot;translation&quot;:&quot;18&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-20&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;dix-neuf&quot;,&quot;rawTerm&quot;:&quot;dix-neuf&quot;,&quot;translation&quot;:&quot;19&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-21&quot;,&quot;icon&quot;:&quot;20&quot;,&quot;term&quot;:&quot;vingt&quot;,&quot;rawTerm&quot;:&quot;vingt&quot;,&quot;translation&quot;:&quot;20&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-22&quot;,&quot;icon&quot;:&quot;30&quot;,&quot;term&quot;:&quot;trente&quot;,&quot;rawTerm&quot;:&quot;trente&quot;,&quot;translation&quot;:&quot;30&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-23&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;quarante&quot;,&quot;rawTerm&quot;:&quot;quarante&quot;,&quot;translation&quot;:&quot;40&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-24&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;cinquante&quot;,&quot;rawTerm&quot;:&quot;cinquante&quot;,&quot;translation&quot;:&quot;50&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-25&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;soixante&quot;,&quot;rawTerm&quot;:&quot;soixante&quot;,&quot;translation&quot;:&quot;60&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-26&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;soixante-dix&quot;,&quot;rawTerm&quot;:&quot;soixante-dix&quot;,&quot;translation&quot;:&quot;70&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-27&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;quatre-vingts&quot;,&quot;rawTerm&quot;:&quot;quatre-vingts&quot;,&quot;translation&quot;:&quot;80&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-28&quot;,&quot;icon&quot;:&quot;🔢&quot;,&quot;term&quot;:&quot;quatre-vingt-dix&quot;,&quot;rawTerm&quot;:&quot;quatre-vingt-dix&quot;,&quot;translation&quot;:&quot;90&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-29&quot;,&quot;icon&quot;:&quot;100&quot;,&quot;term&quot;:&quot;cent&quot;,&quot;rawTerm&quot;:&quot;cent&quot;,&quot;translation&quot;:&quot;100&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;},{&quot;id&quot;:&quot;w-13-30&quot;,&quot;icon&quot;:&quot;1000&quot;,&quot;term&quot;:&quot;mille&quot;,&quot;rawTerm&quot;:&quot;mille&quot;,&quot;translation&quot;:&quot;1000&quot;,&quot;section&quot;:&quot;数字：至少要熟到 0–100&quot;}]}]}</script>
+<script>
+(() => {
+  const root = document.getElementById("frq-app")
+  const dataNode = document.getElementById("frq-data")
+  if (!root || !dataNode || root.dataset.ready === "true") return
+  root.dataset.ready = "true"
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="书">
-    <span>📘</span>
-  </div>
-  <div class="frq-prompt">
-    <p>可以阅读的物品</p>
-    <small>书</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-1-0" class="correct" type="radio" name="frq-1">
-<label for="frq-1-0">livre</label>
-<input id="frq-1-1" class="wrong" type="radio" name="frq-1">
-<label for="frq-1-1">lunettes</label>
-<input id="frq-1-2" class="wrong" type="radio" name="frq-1">
-<label for="frq-1-2">métro</label>
-<input id="frq-1-3" class="wrong" type="radio" name="frq-1">
-<label for="frq-1-3">restaurant</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：livre = 书</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  const data = JSON.parse(dataNode.textContent)
+  const categories = root.querySelector("[data-categories]")
+  const menu = root.querySelector(".frq-menu")
+  const trainer = root.querySelector("[data-trainer]")
+  const title = root.querySelector("[data-section-title]")
+  const progress = root.querySelector("[data-progress]")
+  const icon = root.querySelector("[data-icon]")
+  const translation = root.querySelector("[data-translation]")
+  const sectionLabel = root.querySelector("[data-section-label]")
+  const options = root.querySelector("[data-options]")
+  const feedback = root.querySelector("[data-feedback]")
+  const next = root.querySelector("[data-next]")
+  const back = root.querySelector("[data-back]")
+  const reshuffle = root.querySelector("[data-reshuffle]")
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="椅子">
-    <span>🪑</span>
-  </div>
-  <div class="frq-prompt">
-    <p>坐下时用到的家具</p>
-    <small>椅子</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-2-0" class="wrong" type="radio" name="frq-2">
-<label for="frq-2-0">mer</label>
-<input id="frq-2-1" class="correct" type="radio" name="frq-2">
-<label for="frq-2-1">chaise</label>
-<input id="frq-2-2" class="wrong" type="radio" name="frq-2">
-<label for="frq-2-2">avion</label>
-<input id="frq-2-3" class="wrong" type="radio" name="frq-2">
-<label for="frq-2-3">musée</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：chaise = 椅子</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  let state = { group: null, deck: [], index: 0, locked: false, timer: null }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="桌子">
-    <span>🍽️</span>
-  </div>
-  <div class="frq-prompt">
-    <p>吃饭或学习时会用到</p>
-    <small>桌子</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-3-0" class="wrong" type="radio" name="frq-3">
-<label for="frq-3-0">château</label>
-<input id="frq-3-1" class="wrong" type="radio" name="frq-3">
-<label for="frq-3-1">lit</label>
-<input id="frq-3-2" class="correct" type="radio" name="frq-3">
-<label for="frq-3-2">table</label>
-<input id="frq-3-3" class="wrong" type="radio" name="frq-3">
-<label for="frq-3-3">jardin</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：table = 桌子</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  const allItems = data.groups.flatMap((group) =>
+    group.items.map((item) => ({ ...item, sectionName: group.name, sectionIcon: group.icon })),
+  )
+  const allGroup = {
+    id: "all",
+    name: "全部词汇",
+    icon: "🔀",
+    items: allItems,
+  }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="床">
-    <span>🛏️</span>
-  </div>
-  <div class="frq-prompt">
-    <p>晚上睡觉的地方</p>
-    <small>床</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-4-0" class="wrong" type="radio" name="frq-4">
-<label for="frq-4-0">chapeau</label>
-<input id="frq-4-1" class="wrong" type="radio" name="frq-4">
-<label for="frq-4-1">fenêtre</label>
-<input id="frq-4-2" class="wrong" type="radio" name="frq-4">
-<label for="frq-4-2">lunettes</label>
-<input id="frq-4-3" class="correct" type="radio" name="frq-4">
-<label for="frq-4-3">lit</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：lit = 床</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  function shuffle(items) {
+    const copy = [...items]
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[copy[i], copy[j]] = [copy[j], copy[i]]
+    }
+    return copy
+  }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="门">
-    <span>🚪</span>
-  </div>
-  <div class="frq-prompt">
-    <p>进出房间会经过</p>
-    <small>门</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-5-0" class="correct" type="radio" name="frq-5">
-<label for="frq-5-0">porte</label>
-<input id="frq-5-1" class="wrong" type="radio" name="frq-5">
-<label for="frq-5-1">clé</label>
-<input id="frq-5-2" class="wrong" type="radio" name="frq-5">
-<label for="frq-5-2">robe</label>
-<input id="frq-5-3" class="wrong" type="radio" name="frq-5">
-<label for="frq-5-3">avion</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：porte = 门</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  function sampleOptions(answer, pool) {
+    const picked = [answer.term]
+    const shuffled = shuffle(pool.filter((item) => item.id !== answer.id))
+    for (const item of shuffled) {
+      if (!picked.includes(item.term)) picked.push(item.term)
+      if (picked.length === 4) break
+    }
+    return shuffle(picked)
+  }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="窗户">
-    <span>🪟</span>
-  </div>
-  <div class="frq-prompt">
-    <p>可以看见外面的地方</p>
-    <small>窗户</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-6-0" class="wrong" type="radio" name="frq-6">
-<label for="frq-6-0">jardin</label>
-<input id="frq-6-1" class="correct" type="radio" name="frq-6">
-<label for="frq-6-1">fenêtre</label>
-<input id="frq-6-2" class="wrong" type="radio" name="frq-6">
-<label for="frq-6-2">bus</label>
-<input id="frq-6-3" class="wrong" type="radio" name="frq-6">
-<label for="frq-6-3">vélo</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：fenêtre = 窗户</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  function showMenu() {
+    clearTimeout(state.timer)
+    trainer.hidden = true
+    menu.hidden = false
+  }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="包">
-    <span>🎒</span>
-  </div>
-  <div class="frq-prompt">
-    <p>用来装东西</p>
-    <small>包</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-7-0" class="wrong" type="radio" name="frq-7">
-<label for="frq-7-0">montagne</label>
-<input id="frq-7-1" class="wrong" type="radio" name="frq-7">
-<label for="frq-7-1">chapeau</label>
-<input id="frq-7-2" class="correct" type="radio" name="frq-7">
-<label for="frq-7-2">sac</label>
-<input id="frq-7-3" class="wrong" type="radio" name="frq-7">
-<label for="frq-7-3">café</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：sac = 包</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  function startGroup(group) {
+    state = { group, deck: shuffle(group.items), index: 0, locked: false, timer: null }
+    menu.hidden = true
+    trainer.hidden = false
+    title.textContent = group.name
+    renderCard()
+  }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="钥匙">
-    <span>🔑</span>
-  </div>
-  <div class="frq-prompt">
-    <p>开门时会用到</p>
-    <small>钥匙</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-8-0" class="wrong" type="radio" name="frq-8">
-<label for="frq-8-0">piscine</label>
-<input id="frq-8-1" class="wrong" type="radio" name="frq-8">
-<label for="frq-8-1">chaise</label>
-<input id="frq-8-2" class="wrong" type="radio" name="frq-8">
-<label for="frq-8-2">sac</label>
-<input id="frq-8-3" class="correct" type="radio" name="frq-8">
-<label for="frq-8-3">clé</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：clé = 钥匙</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  function renderCategories() {
+    const groups = [allGroup, ...data.groups]
+    categories.innerHTML = groups
+      .map(
+        (group) => `<button type="button" class="frq-category" data-group="${group.id}">
+          <span class="frq-cat-icon">${group.icon}</span>
+          <span><strong>${group.name}</strong><small>${group.items.length} 个词</small></span>
+          <em>开始</em>
+        </button>`,
+      )
+      .join("")
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="电脑">
-    <span>💻</span>
-  </div>
-  <div class="frq-prompt">
-    <p>学习和工作常用电子设备</p>
-    <small>电脑</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-9-0" class="correct" type="radio" name="frq-9">
-<label for="frq-9-0">ordinateur</label>
-<input id="frq-9-1" class="wrong" type="radio" name="frq-9">
-<label for="frq-9-1">lit</label>
-<input id="frq-9-2" class="wrong" type="radio" name="frq-9">
-<label for="frq-9-2">téléphone</label>
-<input id="frq-9-3" class="wrong" type="radio" name="frq-9">
-<label for="frq-9-3">bus</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：ordinateur = 电脑</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+    for (const button of categories.querySelectorAll("[data-group]")) {
+      button.addEventListener("click", () => {
+        const id = button.getAttribute("data-group")
+        startGroup(groups.find((group) => group.id === id))
+      })
+    }
+  }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="电话">
-    <span>☎️</span>
-  </div>
-  <div class="frq-prompt">
-    <p>用来打电话</p>
-    <small>电话</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-10-0" class="wrong" type="radio" name="frq-10">
-<label for="frq-10-0">café</label>
-<input id="frq-10-1" class="correct" type="radio" name="frq-10">
-<label for="frq-10-1">téléphone</label>
-<input id="frq-10-2" class="wrong" type="radio" name="frq-10">
-<label for="frq-10-2">chaussures</label>
-<input id="frq-10-3" class="wrong" type="radio" name="frq-10">
-<label for="frq-10-3">train</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：téléphone = 电话</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  function renderCard() {
+    clearTimeout(state.timer)
+    state.locked = false
+    next.hidden = true
+    feedback.textContent = ""
+    feedback.className = "frq-feedback"
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="眼镜">
-    <span>👓</span>
-  </div>
-  <div class="frq-prompt">
-    <p>戴在眼睛前面</p>
-    <small>眼镜</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-11-0" class="wrong" type="radio" name="frq-11">
-<label for="frq-11-0">bibliothèque</label>
-<input id="frq-11-1" class="wrong" type="radio" name="frq-11">
-<label for="frq-11-1">piscine</label>
-<input id="frq-11-2" class="correct" type="radio" name="frq-11">
-<label for="frq-11-2">lunettes</label>
-<input id="frq-11-3" class="wrong" type="radio" name="frq-11">
-<label for="frq-11-3">bateau</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：lunettes = 眼镜</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+    if (state.index >= state.deck.length) {
+      state.deck = shuffle(state.group.items)
+      state.index = 0
+    }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="鞋">
-    <span>👟</span>
-  </div>
-  <div class="frq-prompt">
-    <p>穿在脚上</p>
-    <small>鞋</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-12-0" class="wrong" type="radio" name="frq-12">
-<label for="frq-12-0">plage</label>
-<input id="frq-12-1" class="wrong" type="radio" name="frq-12">
-<label for="frq-12-1">banque</label>
-<input id="frq-12-2" class="wrong" type="radio" name="frq-12">
-<label for="frq-12-2">lit</label>
-<input id="frq-12-3" class="correct" type="radio" name="frq-12">
-<label for="frq-12-3">chaussures</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：chaussures = 鞋</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+    const item = state.deck[state.index]
+    const pool = state.group.id === "all" ? state.group.items : state.group.items
+    progress.textContent = `${state.index + 1} / ${state.deck.length}`
+    icon.textContent = item.icon || item.sectionIcon || state.group.icon
+    translation.textContent = item.translation
+    sectionLabel.textContent = item.sectionName || state.group.name
+    options.innerHTML = ""
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="连衣裙">
-    <span>👗</span>
-  </div>
-  <div class="frq-prompt">
-    <p>一种连衣裙</p>
-    <small>连衣裙</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-13-0" class="correct" type="radio" name="frq-13">
-<label for="frq-13-0">robe</label>
-<input id="frq-13-1" class="wrong" type="radio" name="frq-13">
-<label for="frq-13-1">livre</label>
-<input id="frq-13-2" class="wrong" type="radio" name="frq-13">
-<label for="frq-13-2">fenêtre</label>
-<input id="frq-13-3" class="wrong" type="radio" name="frq-13">
-<label for="frq-13-3">lunettes</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：robe = 连衣裙</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+    for (const option of sampleOptions(item, pool)) {
+      const button = document.createElement("button")
+      button.type = "button"
+      button.className = "frq-option"
+      button.textContent = option
+      button.addEventListener("click", () => answer(button, item, option))
+      options.append(button)
+    }
+  }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="汽车">
-    <span>🚗</span>
-  </div>
-  <div class="frq-prompt">
-    <p>路上行驶的小汽车</p>
-    <small>汽车</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-14-0" class="wrong" type="radio" name="frq-14">
-<label for="frq-14-0">bateau</label>
-<input id="frq-14-1" class="correct" type="radio" name="frq-14">
-<label for="frq-14-1">voiture</label>
-<input id="frq-14-2" class="wrong" type="radio" name="frq-14">
-<label for="frq-14-2">clé</label>
-<input id="frq-14-3" class="wrong" type="radio" name="frq-14">
-<label for="frq-14-3">robe</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：voiture = 汽车</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+  function answer(button, item, option) {
+    if (state.locked) return
+    state.locked = true
+    const correct = option === item.term
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="公共汽车">
-    <span>🚌</span>
-  </div>
-  <div class="frq-prompt">
-    <p>城市里的公共交通</p>
-    <small>公共汽车</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-15-0" class="wrong" type="radio" name="frq-15">
-<label for="frq-15-0">restaurant</label>
-<input id="frq-15-1" class="wrong" type="radio" name="frq-15">
-<label for="frq-15-1">plage</label>
-<input id="frq-15-2" class="correct" type="radio" name="frq-15">
-<label for="frq-15-2">bus</label>
-<input id="frq-15-3" class="wrong" type="radio" name="frq-15">
-<label for="frq-15-3">métro</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：bus = 公共汽车</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+    for (const optionButton of options.querySelectorAll("button")) {
+      optionButton.disabled = true
+      if (optionButton.textContent === item.term) optionButton.classList.add("is-correct")
+    }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="地铁">
-    <span>🚇</span>
-  </div>
-  <div class="frq-prompt">
-    <p>地下运行的交通工具</p>
-    <small>地铁</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-16-0" class="wrong" type="radio" name="frq-16">
-<label for="frq-16-0">musée</label>
-<input id="frq-16-1" class="wrong" type="radio" name="frq-16">
-<label for="frq-16-1">mer</label>
-<input id="frq-16-2" class="wrong" type="radio" name="frq-16">
-<label for="frq-16-2">livre</label>
-<input id="frq-16-3" class="correct" type="radio" name="frq-16">
-<label for="frq-16-3">métro</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：métro = 地铁</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
+    if (!correct) button.classList.add("is-wrong")
+    feedback.textContent = correct
+      ? `正确：${item.term} = ${item.translation}`
+      : `答案：${item.term} = ${item.translation}`
+    feedback.classList.add(correct ? "good" : "bad")
+    next.hidden = false
+    state.index += 1
+    state.timer = setTimeout(renderCard, correct ? 650 : 1100)
+  }
 
-<article class="frq-card">
-  <div class="frq-picture" aria-label="火车">
-    <span>🚆</span>
-  </div>
-  <div class="frq-prompt">
-    <p>沿铁轨运行</p>
-    <small>火车</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-17-0" class="correct" type="radio" name="frq-17">
-<label for="frq-17-0">train</label>
-<input id="frq-17-1" class="wrong" type="radio" name="frq-17">
-<label for="frq-17-1">château</label>
-<input id="frq-17-2" class="wrong" type="radio" name="frq-17">
-<label for="frq-17-2">table</label>
-<input id="frq-17-3" class="wrong" type="radio" name="frq-17">
-<label for="frq-17-3">clé</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：train = 火车</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="飞机">
-    <span>✈️</span>
-  </div>
-  <div class="frq-prompt">
-    <p>在天空中飞行</p>
-    <small>飞机</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-18-0" class="wrong" type="radio" name="frq-18">
-<label for="frq-18-0">bus</label>
-<input id="frq-18-1" class="correct" type="radio" name="frq-18">
-<label for="frq-18-1">avion</label>
-<input id="frq-18-2" class="wrong" type="radio" name="frq-18">
-<label for="frq-18-2">porte</label>
-<input id="frq-18-3" class="wrong" type="radio" name="frq-18">
-<label for="frq-18-3">téléphone</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：avion = 飞机</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="船">
-    <span>⛵</span>
-  </div>
-  <div class="frq-prompt">
-    <p>在水上航行</p>
-    <small>船</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-19-0" class="wrong" type="radio" name="frq-19">
-<label for="frq-19-0">train</label>
-<input id="frq-19-1" class="wrong" type="radio" name="frq-19">
-<label for="frq-19-1">musée</label>
-<input id="frq-19-2" class="correct" type="radio" name="frq-19">
-<label for="frq-19-2">bateau</label>
-<input id="frq-19-3" class="wrong" type="radio" name="frq-19">
-<label for="frq-19-3">chaussures</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：bateau = 船</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="自行车">
-    <span>🚲</span>
-  </div>
-  <div class="frq-prompt">
-    <p>两轮脚踏交通工具</p>
-    <small>自行车</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-20-0" class="wrong" type="radio" name="frq-20">
-<label for="frq-20-0">bateau</label>
-<input id="frq-20-1" class="wrong" type="radio" name="frq-20">
-<label for="frq-20-1">jardin</label>
-<input id="frq-20-2" class="wrong" type="radio" name="frq-20">
-<label for="frq-20-2">château</label>
-<input id="frq-20-3" class="correct" type="radio" name="frq-20">
-<label for="frq-20-3">vélo</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：vélo = 自行车</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="餐馆">
-    <span>🍽️</span>
-  </div>
-  <div class="frq-prompt">
-    <p>可以点餐吃饭的地方</p>
-    <small>餐馆</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-21-0" class="correct" type="radio" name="frq-21">
-<label for="frq-21-0">restaurant</label>
-<input id="frq-21-1" class="wrong" type="radio" name="frq-21">
-<label for="frq-21-1">montagne</label>
-<input id="frq-21-2" class="wrong" type="radio" name="frq-21">
-<label for="frq-21-2">chapeau</label>
-<input id="frq-21-3" class="wrong" type="radio" name="frq-21">
-<label for="frq-21-3">porte</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：restaurant = 餐馆</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="咖啡馆">
-    <span>☕</span>
-  </div>
-  <div class="frq-prompt">
-    <p>喝咖啡的小店</p>
-    <small>咖啡馆</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-22-0" class="wrong" type="radio" name="frq-22">
-<label for="frq-22-0">chaussures</label>
-<input id="frq-22-1" class="correct" type="radio" name="frq-22">
-<label for="frq-22-1">café</label>
-<input id="frq-22-2" class="wrong" type="radio" name="frq-22">
-<label for="frq-22-2">chaise</label>
-<input id="frq-22-3" class="wrong" type="radio" name="frq-22">
-<label for="frq-22-3">sac</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：café = 咖啡馆</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="博物馆">
-    <span>🏛️</span>
-  </div>
-  <div class="frq-prompt">
-    <p>看展览的地方</p>
-    <small>博物馆</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-23-0" class="wrong" type="radio" name="frq-23">
-<label for="frq-23-0">voiture</label>
-<input id="frq-23-1" class="wrong" type="radio" name="frq-23">
-<label for="frq-23-1">bateau</label>
-<input id="frq-23-2" class="correct" type="radio" name="frq-23">
-<label for="frq-23-2">musée</label>
-<input id="frq-23-3" class="wrong" type="radio" name="frq-23">
-<label for="frq-23-3">ordinateur</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：musée = 博物馆</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="图书馆">
-    <span>📚</span>
-  </div>
-  <div class="frq-prompt">
-    <p>借书和读书的地方</p>
-    <small>图书馆</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-24-0" class="wrong" type="radio" name="frq-24">
-<label for="frq-24-0">métro</label>
-<input id="frq-24-1" class="wrong" type="radio" name="frq-24">
-<label for="frq-24-1">restaurant</label>
-<input id="frq-24-2" class="wrong" type="radio" name="frq-24">
-<label for="frq-24-2">montagne</label>
-<input id="frq-24-3" class="correct" type="radio" name="frq-24">
-<label for="frq-24-3">bibliothèque</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：bibliothèque = 图书馆</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="花园">
-    <span>🌿</span>
-  </div>
-  <div class="frq-prompt">
-    <p>有植物的户外空间</p>
-    <small>花园</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-25-0" class="correct" type="radio" name="frq-25">
-<label for="frq-25-0">jardin</label>
-<input id="frq-25-1" class="wrong" type="radio" name="frq-25">
-<label for="frq-25-1">musée</label>
-<input id="frq-25-2" class="wrong" type="radio" name="frq-25">
-<label for="frq-25-2">piscine</label>
-<input id="frq-25-3" class="wrong" type="radio" name="frq-25">
-<label for="frq-25-3">chaise</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：jardin = 花园</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="沙滩">
-    <span>🏖️</span>
-  </div>
-  <div class="frq-prompt">
-    <p>海边有沙子的地方</p>
-    <small>沙滩</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-26-0" class="wrong" type="radio" name="frq-26">
-<label for="frq-26-0">ordinateur</label>
-<input id="frq-26-1" class="correct" type="radio" name="frq-26">
-<label for="frq-26-1">plage</label>
-<input id="frq-26-2" class="wrong" type="radio" name="frq-26">
-<label for="frq-26-2">banque</label>
-<input id="frq-26-3" class="wrong" type="radio" name="frq-26">
-<label for="frq-26-3">lit</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：plage = 沙滩</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="山">
-    <span>⛰️</span>
-  </div>
-  <div class="frq-prompt">
-    <p>很高的自然地形</p>
-    <small>山</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-27-0" class="wrong" type="radio" name="frq-27">
-<label for="frq-27-0">lunettes</label>
-<input id="frq-27-1" class="wrong" type="radio" name="frq-27">
-<label for="frq-27-1">métro</label>
-<input id="frq-27-2" class="correct" type="radio" name="frq-27">
-<label for="frq-27-2">montagne</label>
-<input id="frq-27-3" class="wrong" type="radio" name="frq-27">
-<label for="frq-27-3">fenêtre</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：montagne = 山</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="大海">
-    <span>🌊</span>
-  </div>
-  <div class="frq-prompt">
-    <p>大片咸水</p>
-    <small>大海</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-28-0" class="wrong" type="radio" name="frq-28">
-<label for="frq-28-0">robe</label>
-<input id="frq-28-1" class="wrong" type="radio" name="frq-28">
-<label for="frq-28-1">avion</label>
-<input id="frq-28-2" class="wrong" type="radio" name="frq-28">
-<label for="frq-28-2">musée</label>
-<input id="frq-28-3" class="correct" type="radio" name="frq-28">
-<label for="frq-28-3">mer</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：mer = 大海</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="游泳池">
-    <span>🏊</span>
-  </div>
-  <div class="frq-prompt">
-    <p>游泳的地方</p>
-    <small>游泳池</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-29-0" class="correct" type="radio" name="frq-29">
-<label for="frq-29-0">piscine</label>
-<input id="frq-29-1" class="wrong" type="radio" name="frq-29">
-<label for="frq-29-1">vélo</label>
-<input id="frq-29-2" class="wrong" type="radio" name="frq-29">
-<label for="frq-29-2">jardin</label>
-<input id="frq-29-3" class="wrong" type="radio" name="frq-29">
-<label for="frq-29-3">banque</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：piscine = 游泳池</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="城堡">
-    <span>🏰</span>
-  </div>
-  <div class="frq-prompt">
-    <p>城堡</p>
-    <small>城堡</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-30-0" class="wrong" type="radio" name="frq-30">
-<label for="frq-30-0">fenêtre</label>
-<input id="frq-30-1" class="correct" type="radio" name="frq-30">
-<label for="frq-30-1">château</label>
-<input id="frq-30-2" class="wrong" type="radio" name="frq-30">
-<label for="frq-30-2">montagne</label>
-<input id="frq-30-3" class="wrong" type="radio" name="frq-30">
-<label for="frq-30-3">livre</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：château = 城堡</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-
-<article class="frq-card">
-  <div class="frq-picture" aria-label="银行">
-    <span>🏦</span>
-  </div>
-  <div class="frq-prompt">
-    <p>存钱和取钱的地方</p>
-    <small>银行</small>
-  </div>
-  <div class="frq-options">
-<input id="frq-31-0" class="wrong" type="radio" name="frq-31">
-<label for="frq-31-0">clé</label>
-<input id="frq-31-1" class="wrong" type="radio" name="frq-31">
-<label for="frq-31-1">robe</label>
-<input id="frq-31-2" class="correct" type="radio" name="frq-31">
-<label for="frq-31-2">banque</label>
-<input id="frq-31-3" class="wrong" type="radio" name="frq-31">
-<label for="frq-31-3">table</label>
-  </div>
-  <p class="frq-feedback frq-good">正确：banque = 银行</p>
-  <p class="frq-feedback frq-bad">再想想，看图和中文提示都指向同一个词。</p>
-</article>
-</section>
+  next.addEventListener("click", renderCard)
+  back.addEventListener("click", showMenu)
+  reshuffle.addEventListener("click", () => startGroup(state.group))
+  renderCategories()
+})()
+</script>
