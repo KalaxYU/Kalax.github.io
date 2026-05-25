@@ -11,6 +11,24 @@ $ParamRepoPath = $RepoPath
 $ParamDebounceSeconds = $DebounceSeconds
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$LogPath = Join-Path $ScriptDir "french-sync.log"
+try {
+  Start-Transcript -Path $LogPath -Append | Out-Null
+} catch {
+  Write-Warning "Could not start transcript log: $($_.Exception.Message)"
+}
+
+$Mutex = New-Object System.Threading.Mutex($false, "KalaxFrenchNotesSyncWatcher")
+$HasMutex = $Mutex.WaitOne(0)
+if (-not $HasMutex) {
+  Write-Host "French notes watcher is already running."
+  try {
+    Stop-Transcript | Out-Null
+  } catch {
+  }
+  exit 0
+}
+
 $ConfigPath = Join-Path $ScriptDir "french-sync.config.ps1"
 if (Test-Path -LiteralPath $ConfigPath) {
   . $ConfigPath
@@ -100,4 +118,12 @@ try {
     Unregister-Event -SubscriptionId $Subscription.Id -ErrorAction SilentlyContinue
   }
   $Watcher.Dispose()
+  if ($HasMutex) {
+    $Mutex.ReleaseMutex()
+    $Mutex.Dispose()
+  }
+  try {
+    Stop-Transcript | Out-Null
+  } catch {
+  }
 }

@@ -8,5 +8,6 @@ tsconfig.tsbuildinfo
 .quartz-cache
 private/
 scripts/french-sync.config.ps1
+scripts/french-sync.log
 .replit
 replit.nix
