@@ -117,6 +117,14 @@ if ($RoboExit -gt 7) {
   throw "robocopy failed with exit code $RoboExit"
 }
 
+$StudyPageGenerator = Join-Path $ScriptDir "generate-french-study-pages.mjs"
+if (Test-Path -LiteralPath $StudyPageGenerator) {
+  node $StudyPageGenerator --content $DestinationPath --source $SourcePath
+  if ($LASTEXITCODE -ne 0) {
+    throw "French study page generation failed"
+  }
+}
+
 function Update-FrenchIndex {
   param(
     [string]$FrenchPath,
