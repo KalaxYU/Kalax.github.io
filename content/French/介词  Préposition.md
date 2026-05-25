@@ -1,2 +1,592 @@
+# 一、介词是什么？
 
-## 分类
+介词就是放在名词、代词、动词不定式前面，表示关系的词。
+
+比如：
+
+> Je vais **à Paris**.  
+> 我去巴黎。
+
+> Le livre **de Marie**.  
+> Marie 的书。
+
+> Il parle **avec Paul**.  
+> 他和 Paul 说话。
+
+介词后面常接：
+
+|结构|例子|
+|---|---|
+|名词|à Paris|
+|人名|avec Marie|
+|代词|chez moi|
+|动词不定式|avant de partir|
+
+---
+
+# 二、最核心介词：à
+
+## 1. 表示地点：在 / 去
+
+### 城市前用 **à**
+
+> Je suis **à Tokyo**.  
+> 我在东京。
+
+> Je vais **à Paris**.  
+> 我去巴黎。
+
+### 具体地点也常用 à
+
+> Je suis **à l’école**.  
+> 我在学校。
+
+> Il va **au cinéma**.  
+> 他去电影院。
+
+注意缩合：
+
+|原形式|缩合|
+|---|---|
+|à + le|au|
+|à + les|aux|
+
+所以：
+
+> à le cinéma ❌  
+> **au cinéma** ✅
+
+> à les États-Unis ❌  
+> **aux États-Unis** ✅
+
+---
+
+## 2. 表示对象：给 / 对
+
+> Je parle **à Marie**.  
+> 我对 Marie 说话。
+
+> Il donne un livre **à Paul**.  
+> 他给 Paul 一本书。
+
+这里的 **à Marie / à Paul** 相当于“给谁 / 对谁”。
+
+---
+
+## 3. 固定搭配
+
+很多动词后面固定接 **à**：
+
+|动词|意思|
+|---|---|
+|parler à qn|和某人说话|
+|téléphoner à qn|给某人打电话|
+|penser à qn/qch|想到某人/某事|
+|réussir à faire qch|成功做到某事|
+
+例子：
+
+> Je pense **à toi**.  
+> 我想到你。
+
+> Il réussit **à finir** le travail.  
+> 他成功完成了工作。
+
+---
+
+# 三、核心介词：de
+
+## 1. 表示来源：从……
+
+> Je viens **de Chine**.  
+> 我来自中国。
+
+> Il sort **de la maison**.  
+> 他从房子里出来。
+
+---
+
+## 2. 表示所属：……的
+
+> Le livre **de Marie**.  
+> Marie 的书。
+
+> La voiture **de mon père**.  
+> 我爸爸的车。
+
+法语一般不用类似英语 `'s` 的结构，而是用 **de**。
+
+---
+
+## 3. 表示内容 / 材料 / 主题
+
+> une tasse **de café**  
+> 一杯咖啡
+
+> un cours **de français**  
+> 一节法语课
+
+> une table **de bois**  
+> 一张木桌
+
+---
+
+## 4. 固定搭配
+
+很多动词后面固定接 **de**：
+
+|动词|意思|
+|---|---|
+|parler de qch|谈论某事|
+|avoir besoin de|需要|
+|avoir envie de|想要|
+|décider de faire|决定做|
+|essayer de faire|尝试做|
+
+例子：
+
+> J’ai besoin **de temps**.  
+> 我需要时间。
+
+> Elle parle **de son voyage**.  
+> 她谈论她的旅行。
+
+---
+
+## 5. de 的缩合
+
+|原形式|缩合|
+|---|---|
+|de + le|du|
+|de + les|des|
+
+例子：
+
+> de le pain ❌  
+> **du pain** ✅
+
+> de les étudiants ❌  
+> **des étudiants** ✅
+
+---
+
+# 四、à 和 de 的区别
+
+这是法语大坑之一 🫠
+
+## 1. à 偏向“目标 / 方向 / 对象”
+
+> Je vais **à Paris**.  
+> 我去巴黎。
+
+> Je parle **à Marie**.  
+> 我跟 Marie 说话。
+
+## 2. de 偏向“来源 / 所属 / 内容”
+
+> Je viens **de Paris**.  
+> 我从巴黎来。
+
+> Le sac **de Marie**.  
+> Marie 的包。
+
+可以粗暴记：
+
+|介词|核心感觉|
+|---|---|
+|à|到、向、给、在|
+|de|从、的、关于、一些|
+
+---
+
+# 五、en
+
+## 1. 表示国家 / 地区：在……，去……
+
+阴性国家、元音开头国家通常用 **en**。
+
+> Je vais **en France**.  
+> 我去法国。
+
+> Il habite **en Chine**.  
+> 他住在中国。
+
+> Elle va **en Italie**.  
+> 她去意大利。
+
+常见：
+
+|国家|介词|
+|---|---|
+|en France|在/去法国|
+|en Chine|在/去中国|
+|en Italie|在/去意大利|
+|au Japon|在/去日本|
+|aux États-Unis|在/去美国|
+
+---
+
+## 2. 表示交通方式
+
+> Je vais à l’école **en bus**.  
+> 我坐公交去学校。
+
+> Il voyage **en train**.  
+> 他坐火车旅行。
+
+但如果是“走路”，用：
+
+> **à pied**  
+> 步行
+
+---
+
+## 3. 表示材料 / 状态 / 语言
+
+> une bague **en or**  
+> 金戒指
+
+> parler **en français**  
+> 用法语说话
+
+> être **en colère**  
+> 生气
+
+---
+
+## 4. 表示时间长度：用多久完成
+
+> Il a fini le devoir **en deux heures**.  
+> 他用两个小时完成了作业。
+
+注意和 **dans** 区别：
+
+> Je pars **dans deux heures**.  
+> 我两小时后出发。
+
+> Je finis ça **en deux heures**.  
+> 我用两小时完成这个。
+
+---
+
+# 六、dans
+
+## 1. 表示“在……里面”
+
+> Le livre est **dans le sac**.  
+> 书在包里。
+
+> Je suis **dans la chambre**.  
+> 我在房间里。
+
+---
+
+## 2. 表示“……之后”
+
+> Je pars **dans dix minutes**.  
+> 我十分钟后出发。
+
+> Le cours commence **dans une heure**.  
+> 课一小时后开始。
+
+所以：
+
+|法语|意思|
+|---|---|
+|en deux heures|用两小时|
+|dans deux heures|两小时后|
+
+---
+
+# 七、sur
+
+## 1. 表示“在……上面”
+
+> Le livre est **sur la table**.  
+> 书在桌子上。
+
+---
+
+## 2. 表示关于某个主题
+
+> un livre **sur l’histoire**  
+> 一本关于历史的书
+
+> un film **sur la guerre**  
+> 一部关于战争的电影
+
+注意：
+
+|介词|区别|
+|---|---|
+|parler de qch|谈论某事|
+|un livre sur qch|一本关于某事的书|
+
+---
+
+# 八、chez
+
+## 1. 表示“在某人家 / 去某人家”
+
+> Je vais **chez Marie**.  
+> 我去 Marie 家。
+
+> Je suis **chez moi**.  
+> 我在我家。
+
+常见搭配：
+
+|法语|意思|
+|---|---|
+|chez moi|在/去我家|
+|chez toi|在/去你家|
+|chez lui|在/去他家|
+|chez elle|在/去她家|
+|chez nous|在/去我们家|
+|chez vous|在/去你们家|
+|chez eux|在/去他们家|
+
+---
+
+## 2. 表示职业场所
+
+> Je vais **chez le médecin**.  
+> 我去看医生。
+
+字面上不是“医生家”，而是“医生那里”。
+
+---
+
+# 九、pour
+
+## 1. 表示目的：为了
+
+> Je travaille **pour réussir**.  
+> 我为了成功而努力。
+
+> C’est **pour toi**.  
+> 这是给你的。
+
+---
+
+## 2. 表示时间长度
+
+> Je reste ici **pour trois jours**.  
+> 我在这里待三天。
+
+不过日常中也常直接说：
+
+> Je reste ici trois jours.
+
+---
+
+# 十、par
+
+## 1. 表示经过
+
+> Je passe **par Paris**.  
+> 我经过巴黎。
+
+---
+
+## 2. 表示被动语态中的“由……”
+
+> Le livre est écrit **par Victor Hugo**.  
+> 这本书由雨果写成。
+
+---
+
+## 3. 表示方式 / 每……
+
+> Il vient **par train**.  
+> 他坐火车来。  
+> 不过现代口语更常说 **en train**。
+
+> deux fois **par semaine**  
+> 每周两次
+
+---
+
+# 十一、avec / sans
+
+## avec = 和……一起 / 用……
+
+> Je vais au cinéma **avec mes amis**.  
+> 我和朋友去电影院。
+
+> Il écrit **avec un stylo**.  
+> 他用笔写字。
+
+## sans = 没有……
+
+> Je bois du café **sans sucre**.  
+> 我喝不加糖的咖啡。
+
+> Il part **sans moi**.  
+> 他不带我走。
+
+---
+
+# 十二、avant / après
+
+## avant = 在……之前
+
+如果后面接动词，要用：
+
+> avant **de + 动词原形**
+
+例子：
+
+> Je mange avant le cours.  
+> 我上课前吃饭。
+
+> Je mange avant **de partir**.  
+> 我出发前吃饭。
+
+## après = 在……之后
+
+> après le cours  
+> 下课后
+
+> après avoir fini  
+> 完成之后
+
+---
+
+# 十三、地点介词总结
+
+|介词|意思|例子|
+|---|---|---|
+|à|在/去城市、地点|à Paris, à l’école|
+|en|在/去阴性国家|en France|
+|au|在/去阳性国家|au Japon|
+|aux|在/去复数国家|aux États-Unis|
+|dans|在……里面|dans le sac|
+|sur|在……上面|sur la table|
+|sous|在……下面|sous la chaise|
+|devant|在……前面|devant la maison|
+|derrière|在……后面|derrière l’école|
+|entre|在两者之间|entre A et B|
+|chez|在/去某人那里|chez moi|
+
+---
+
+# 十四、时间介词总结
+
+|介词|用法|例子|
+|---|---|---|
+|à|具体时刻|à huit heures|
+|en|月份、季节、年份；用多久|en mai, en 2026, en deux heures|
+|dans|……之后|dans dix minutes|
+|depuis|自从，持续到现在|depuis deux ans|
+|pendant|在……期间，持续了多久|pendant trois jours|
+|pour|预计持续多久|pour une semaine|
+|avant|在……之前|avant le cours|
+|après|在……之后|après le cours|
+
+例子：
+
+> J’apprends le français **depuis deux ans**.  
+> 我学法语两年了。  
+> 重点：现在还在学。
+
+> J’ai étudié **pendant deux heures**.  
+> 我学习了两个小时。  
+> 重点：强调持续时间。
+
+---
+
+# 十五、几个高频固定搭配
+
+|法语|意思|
+|---|---|
+|avoir besoin de|需要|
+|avoir envie de|想要|
+|avoir peur de|害怕|
+|être content de|对……高兴|
+|être prêt à|准备好做|
+|penser à|想到|
+|penser de|认为，看法|
+|parler à|和某人说话|
+|parler de|谈论某事|
+|s’intéresser à|对……感兴趣|
+|participer à|参加|
+|commencer à faire|开始做|
+|finir de faire|做完|
+|essayer de faire|尝试做|
+|décider de faire|决定做|
+
+---
+
+# 十六、容易混的几组
+
+## 1. parler à / parler de
+
+> Je parle **à Marie**.  
+> 我跟 Marie 说话。
+
+> Je parle **de Marie**.  
+> 我谈论 Marie。
+
+---
+
+## 2. penser à / penser de
+
+> Je pense **à toi**.  
+> 我想到你。
+
+> Qu’est-ce que tu penses **de ce film** ?  
+> 你觉得这部电影怎么样？
+
+---
+
+## 3. à / chez
+
+> Je vais **à l’école**.  
+> 我去学校。
+
+> Je vais **chez Marie**.  
+> 我去 Marie 家。
+
+地点机构用 **à**，某人那里用 **chez**。
+
+---
+
+## 4. en / dans
+
+> Je finis mes devoirs **en une heure**.  
+> 我用一小时完成作业。
+
+> Je pars **dans une heure**.  
+> 我一小时后出发。
+
+---
+
+## 5. sur / dans
+
+> Le livre est **sur le sac**.  
+> 书在包上。
+
+> Le livre est **dans le sac**.  
+> 书在包里。
+
+---
+
+# 十七、最建议你先记住的核心表
+
+|介词|核心意思|
+|---|---|
+|à|到、在、给、对|
+|de|从、的、关于、一些|
+|en|在/去某些国家、用某交通、用多久|
+|dans|在里面、多久之后|
+|sur|在上面、关于|
+|chez|在/去某人那里|
+|pour|为了、给、持续|
+|par|经过、由、每|
+|avec|和、用|
+|sans|没有|
+|avant|之前|
+|après|之后|
+|depuis|自从，持续到现在|
+|pendant|在……期间|
