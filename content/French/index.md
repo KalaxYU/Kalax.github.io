@@ -2,8 +2,6 @@
 title: 法语 Français
 ---
 
-# 法语 Français
-
 这里是我的法语学习笔记。
 
 ## 目录

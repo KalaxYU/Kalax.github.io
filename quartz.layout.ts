@@ -1,17 +1,15 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
+import { QuartzComponentProps } from "./quartz/components/types"
+
+const notHome = (page: QuartzComponentProps) => page.fileData.slug !== "index"
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [],
-  footer: Component.Footer({
-    links: {
-      GitHub: "https://github.com/jackyzha0/quartz",
-      "Discord Community": "https://discord.gg/cRFFHYye7t",
-    },
-  }),
+  footer: Component.Spacer(),
 }
 
 // components for pages that display a single page (e.g. a single note)
@@ -19,11 +17,20 @@ export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
     Component.ConditionalRender({
       component: Component.Breadcrumbs(),
-      condition: (page) => page.fileData.slug !== "index",
+      condition: notHome,
     }),
-    Component.ArticleTitle(),
-    Component.ContentMeta(),
-    Component.TagList(),
+    Component.ConditionalRender({
+      component: Component.ArticleTitle(),
+      condition: notHome,
+    }),
+    Component.ConditionalRender({
+      component: Component.ContentMeta(),
+      condition: notHome,
+    }),
+    Component.ConditionalRender({
+      component: Component.TagList(),
+      condition: notHome,
+    }),
   ],
   left: [
     Component.PageTitle(),
@@ -41,9 +48,14 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Explorer(),
   ],
   right: [
-    Component.Graph(),
-    Component.DesktopOnly(Component.TableOfContents()),
-    Component.Backlinks(),
+    Component.ConditionalRender({
+      component: Component.DesktopOnly(Component.TableOfContents()),
+      condition: notHome,
+    }),
+    Component.ConditionalRender({
+      component: Component.Backlinks(),
+      condition: notHome,
+    }),
   ],
 }
 

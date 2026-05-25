@@ -4,8 +4,6 @@ tags:
   - flashcards
 ---
 
-# Lesson 1-12 Flashcards
-
 #flashcards
 
 [[Lesson 1-12  Vocabulaire|返回词汇表]] · [[Lesson 1-12 图片选词练习|图片选词练习]]
