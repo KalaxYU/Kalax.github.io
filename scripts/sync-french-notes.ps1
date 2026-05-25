@@ -117,6 +117,95 @@ if ($RoboExit -gt 7) {
   throw "robocopy failed with exit code $RoboExit"
 }
 
+function Update-FrenchIndex {
+  param(
+    [string]$FrenchPath,
+    [string]$IndexFileName = "index.md"
+  )
+
+  $IndexPath = Join-Path $FrenchPath $IndexFileName
+  if (-not (Test-Path -LiteralPath $IndexPath)) {
+    return
+  }
+
+  $Utf8NoBom = New-Object System.Text.UTF8Encoding $false
+  $Text = [System.IO.File]::ReadAllText($IndexPath, $Utf8NoBom)
+  $NewLine = if ($Text -match "`r`n") { "`r`n" } else { "`n" }
+  $Lines = $Text -split "`r?`n", -1
+  $IndexHeading = "$([char]0x76ee)$([char]0x5f55)"
+  $IndexHeadingPattern = '^\s*##\s+' + [regex]::Escape($IndexHeading) + '\s*$'
+
+  $HeadingIndex = -1
+  for ($i = 0; $i -lt $Lines.Count; $i++) {
+    if ($Lines[$i] -match $IndexHeadingPattern) {
+      $HeadingIndex = $i
+      break
+    }
+  }
+
+  if ($HeadingIndex -lt 0) {
+    return
+  }
+
+  $SectionEnd = $Lines.Count
+  for ($i = $HeadingIndex + 1; $i -lt $Lines.Count; $i++) {
+    if ($Lines[$i] -match '^\s*##\s+' -and $Lines[$i] -notmatch $IndexHeadingPattern) {
+      $SectionEnd = $i
+      break
+    }
+  }
+
+  $Notes = Get-ChildItem -LiteralPath $FrenchPath -File -Filter "*.md" |
+    Where-Object { $_.Name -ne $IndexFileName } |
+    Sort-Object BaseName
+
+  $NoteNames = @{}
+  foreach ($Note in $Notes) {
+    $NoteNames[$Note.BaseName] = $true
+  }
+
+  $ExistingLinks = New-Object System.Collections.Generic.List[string]
+  $ExistingTargets = @{}
+  for ($i = $HeadingIndex + 1; $i -lt $SectionEnd; $i++) {
+    $Line = $Lines[$i]
+    if ($Line -match '^\s*-\s*\[\[([^\]|#]+)') {
+      $Target = $Matches[1].Trim()
+      if ($NoteNames.ContainsKey($Target) -and -not $ExistingTargets.ContainsKey($Target)) {
+        $ExistingLinks.Add($Line)
+        $ExistingTargets[$Target] = $true
+      }
+    }
+  }
+
+  foreach ($Note in $Notes) {
+    if (-not $ExistingTargets.ContainsKey($Note.BaseName)) {
+      $ExistingLinks.Add("- [[$($Note.BaseName)|$($Note.BaseName)]]")
+    }
+  }
+
+  $Replacement = New-Object System.Collections.Generic.List[string]
+  for ($i = 0; $i -le $HeadingIndex; $i++) {
+    $Replacement.Add($Lines[$i])
+  }
+
+  $Replacement.Add("")
+  foreach ($Link in $ExistingLinks) {
+    $Replacement.Add($Link)
+  }
+
+  for ($i = $SectionEnd; $i -lt $Lines.Count; $i++) {
+    $Replacement.Add($Lines[$i])
+  }
+
+  $Updated = [string]::Join($NewLine, $Replacement)
+  if ($Updated -ne $Text) {
+    [System.IO.File]::WriteAllText($IndexPath, $Updated, $Utf8NoBom)
+    Write-Host "Updated French index links."
+  }
+}
+
+Update-FrenchIndex -FrenchPath $DestinationPath
+
 $Changes = git -C $RepoPath status --porcelain -- "content/French"
 if (-not $Changes) {
   Write-Host "No French note changes to commit."
